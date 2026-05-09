@@ -1,0 +1,2465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transformation Totale V4 — Jeûne 16:8</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070a0e;--s1:#0d1117;--s2:#141b24;--s3:#1c2534;
+  --fire:#e8420f;--fire2:#ff6b35;--gold:#f0a500;--gold2:#fbbf24;
+  --g:#22c55e;--b:#38bdf8;--p:#a855f7;
+  --t:#ede8df;--m:#64748b;--bd:rgba(255,255,255,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;overflow-x:hidden;min-height:100vh;}
+
+/* ── HEADER ─────────────────────────────── */
+.hdr{
+  position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#07090d 0%,#130800 50%,#070d13 100%);
+  padding:52px 20px 44px;text-align:center;border-bottom:1px solid var(--bd);
+}
+.hdr::before{
+  content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);
+  width:800px;height:500px;pointer-events:none;
+  background:radial-gradient(ellipse,rgba(232,66,15,0.13) 0%,transparent 65%);
+}
+.hdr-tag{
+  display:inline-block;border:1px solid rgba(232,66,15,0.3);
+  background:rgba(232,66,15,0.1);color:var(--fire2);
+  font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;
+  padding:5px 18px;border-radius:100px;margin-bottom:20px;
+}
+.hdr h1{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(54px,12vw,110px);
+  letter-spacing:5px;line-height:0.86;
+  background:linear-gradient(140deg,#fff 0%,var(--fire2) 40%,var(--gold) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:12px;
+}
+.hdr-sub{color:var(--m);font-size:12px;letter-spacing:2px;}
+.stats{display:flex;justify-content:center;gap:32px;margin-top:32px;flex-wrap:wrap;}
+.stv{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--fire2);line-height:1;}
+.stl{font-size:9px;color:var(--m);letter-spacing:2.5px;text-transform:uppercase;margin-top:3px;}
+
+/* ── TABS ─────────────────────────────── */
+.tabs-bar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(7,10,14,0.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--bd);
+  display:flex;gap:0;overflow-x:auto;
+}
+.tabs-bar::-webkit-scrollbar{height:0;}
+.tab{
+  flex:1;min-width:80px;padding:14px 12px;
+  background:none;border:none;cursor:pointer;
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--m);
+  border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;
+}
+.tab:hover{color:var(--t);}
+.tab.active{color:var(--fire2);border-bottom-color:var(--fire2);}
+
+/* ── VIEWS ─────────────────────────────── */
+.view{display:none;}
+.view.active{display:block;}
+
+/* ── SHARED ─────────────────────────────── */
+.wrap{max-width:880px;margin:0 auto;padding:24px 16px 80px;}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:22px;margin-bottom:16px;}
+.card-ttl{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--fire2);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.slbl{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--m);margin:18px 0 10px;display:flex;align-items:center;gap:8px;}
+.slbl::after{content:'';flex:1;height:1px;background:var(--bd);}
+
+/* ── MEAL ANALYZER ─────────────────────── */
+.analyzer-hero{
+  background:linear-gradient(135deg,var(--s1) 0%,#12080a 100%);
+  border:1px solid rgba(232,66,15,0.2);border-radius:16px;
+  padding:28px 20px;margin-bottom:16px;text-align:center;
+}
+.az-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;color:var(--t);margin-bottom:8px;}
+.az-sub{font-size:13px;color:var(--m);margin-bottom:24px;line-height:1.6;}
+.upload-zone{
+  border:2px dashed rgba(232,66,15,0.3);border-radius:14px;
+  padding:36px 20px;cursor:pointer;transition:all 0.2s;
+  background:rgba(232,66,15,0.03);position:relative;
+}
+.upload-zone:hover{border-color:var(--fire2);background:rgba(232,66,15,0.06);}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.uz-ico{font-size:48px;margin-bottom:12px;}
+.uz-text{font-size:14px;color:var(--t);font-weight:600;margin-bottom:4px;}
+.uz-sub{font-size:12px;color:var(--m);}
+
+.preview-img{
+  width:100%;max-height:280px;object-fit:cover;border-radius:12px;
+  margin-bottom:16px;border:1px solid var(--bd);display:none;
+}
+.analyze-btn{
+  width:100%;padding:14px;background:linear-gradient(135deg,var(--fire),var(--fire2));
+  border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;
+  font-size:14px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  cursor:pointer;transition:all 0.2s;margin-bottom:16px;display:none;
+}
+.analyze-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(232,66,15,0.4);}
+.analyze-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+
+.analysis-result{
+  background:var(--s2);border:1px solid var(--bd);border-radius:14px;
+  padding:20px;display:none;text-align:left;
+}
+.ar-loading{display:flex;align-items:center;gap:12px;color:var(--m);font-size:13px;}
+.ar-loading .spin{
+  width:20px;height:20px;border:2px solid var(--bd);border-top-color:var(--fire2);
+  border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ar-content{display:none;}
+.ar-meal-name{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--t);margin-bottom:12px;}
+.ar-macros{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+.ar-macro{background:var(--s3);border-radius:10px;padding:12px;text-align:center;}
+.ar-mv{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;line-height:1;}
+.ar-ml{font-size:9px;color:var(--m);letter-spacing:2px;text-transform:uppercase;margin-top:3px;}
+.ar-feedback{font-size:13px;color:var(--m);line-height:1.7;background:var(--s3);border-radius:10px;padding:14px;}
+.ar-feedback strong{color:var(--t);}
+.ar-score{
+  display:flex;align-items:center;gap:12px;margin-bottom:12px;
+  padding:12px;background:var(--s3);border-radius:10px;
+}
+.ar-score-val{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;}
+.ar-score-lbl{font-size:12px;color:var(--m);line-height:1.5;}
+
+/* ── MEAL LOG ─────────────────────────── */
+.log-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.log-date-nav{display:flex;align-items:center;gap:10px;}
+.date-btn{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;color:var(--t);cursor:pointer;font-size:18px;}
+.log-date-lbl{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;}
+.day-total{
+  background:linear-gradient(135deg,rgba(34,197,94,0.1),rgba(56,189,248,0.06));
+  border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:16px;margin-bottom:14px;
+}
+.dt-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.dt-kcal{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--g);line-height:1;}
+.dt-target{font-size:11px;color:var(--m);}
+.dt-macros{display:flex;gap:16px;margin-top:10px;flex-wrap:wrap;}
+.dt-mac{font-size:12px;color:var(--m);}
+.dt-mac span{color:var(--t);font-weight:600;}
+.meal-entry{
+  background:var(--s2);border:1px solid var(--bd);border-radius:12px;
+  padding:14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;
+}
+.me-thumb{width:56px;height:56px;border-radius:9px;object-fit:cover;flex-shrink:0;border:1px solid var(--bd);}
+.me-thumb.placeholder{background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:24px;}
+.me-info{flex:1;}
+.me-name{font-weight:700;font-size:13px;margin-bottom:3px;}
+.me-time{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--fire2);}
+.me-kcal{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--g);}
+.me-del{background:none;border:none;color:var(--m);font-size:16px;cursor:pointer;padding:4px;flex-shrink:0;}
+.me-del:hover{color:var(--fire);}
+.no-entries{text-align:center;padding:32px;color:var(--m);font-size:13px;}
+
+/* ── WATER TRACKER ─────────────────────── */
+.water-card{
+  background:linear-gradient(135deg,rgba(56,189,248,0.06),rgba(56,189,248,0.02));
+  border:1px solid rgba(56,189,248,0.2);border-radius:16px;padding:22px;margin-bottom:16px;
+}
+.water-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--b);margin-bottom:16px;}
+.water-glasses{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.glass{
+  width:44px;height:54px;background:var(--s2);border:1px solid var(--bd);
+  border-radius:6px;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;font-size:22px;transition:all 0.15s;
+  position:relative;overflow:hidden;
+}
+.glass::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:0%;
+  background:linear-gradient(to top,rgba(56,189,248,0.5),rgba(56,189,248,0.2));
+  transition:height 0.3s;
+}
+.glass.filled::before{height:100%;}
+.glass span{position:relative;z-index:1;}
+.water-info{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.water-ml{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--b);line-height:1;}
+.water-target{font-size:12px;color:var(--m);}
+.water-reset{background:none;border:1px solid var(--bd);border-radius:8px;padding:6px 12px;color:var(--m);cursor:pointer;font-size:11px;font-family:'Syne',sans-serif;}
+
+/* ── REMINDERS ─────────────────────────── */
+.reminder-list{display:flex;flex-direction:column;gap:10px;}
+.reminder-item{
+  background:var(--s2);border:1px solid var(--bd);border-radius:12px;
+  padding:14px 16px;display:flex;align-items:center;gap:14px;
+}
+.rem-ico{font-size:24px;flex-shrink:0;}
+.rem-info{flex:1;}
+.rem-title{font-weight:700;font-size:13px;margin-bottom:3px;}
+.rem-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--fire2);}
+.rem-toggle{
+  width:44px;height:24px;background:var(--s3);border:1px solid var(--bd);
+  border-radius:100px;cursor:pointer;position:relative;transition:all 0.2s;flex-shrink:0;
+}
+.rem-toggle::after{
+  content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;
+  background:var(--m);border-radius:50%;transition:all 0.2s;
+}
+.rem-toggle.on{background:rgba(34,197,94,0.2);border-color:rgba(34,197,94,0.4);}
+.rem-toggle.on::after{transform:translateX(20px);background:var(--g);}
+.rem-edit{background:none;border:none;color:var(--m);cursor:pointer;font-size:14px;padding:4px;}
+.time-input{
+  background:var(--s3);border:1px solid var(--bd);border-radius:8px;
+  padding:6px 10px;color:var(--t);font-family:'JetBrains Mono',monospace;
+  font-size:13px;outline:none;width:90px;
+}
+.time-input:focus{border-color:var(--fire2);}
+
+/* ── WEIGHT TRACKER ─────────────────────── */
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;}
+.ww{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:10px;text-align:center;transition:all 0.2s;}
+.ww:hover{border-color:rgba(232,66,15,0.3);}
+.ww.filled{border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.04);}
+.ww-l{font-size:9px;color:var(--m);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;}
+.ww-d{font-size:11px;font-weight:600;margin-bottom:6px;}
+.ww-i{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--bd);border-radius:7px;padding:5px;color:var(--t);font-family:'JetBrains Mono',monospace;font-size:13px;text-align:center;outline:none;}
+.ww-i:focus{border-color:var(--fire);}
+.ww-df{font-size:10px;margin-top:5px;font-weight:700;}
+.ww-df.gd{color:var(--g);}
+.ww-df.bd{color:var(--fire);}
+
+/* ── CALENDAR (compact) ─────────────────── */
+.mnav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
+.mbtn{flex:1;min-width:90px;background:var(--s1);border:1px solid var(--bd);border-radius:9px;padding:9px 10px;color:var(--m);font-family:'Syne',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.2s;text-align:center;}
+.mbtn:hover{border-color:var(--fire);color:var(--t);}
+.mbtn.active{background:linear-gradient(135deg,var(--fire),var(--fire2));border-color:transparent;color:#fff;}
+.dc{background:var(--s1);border:1px solid var(--bd);border-radius:13px;margin-bottom:9px;overflow:hidden;cursor:pointer;transition:border-color 0.2s;}
+.dc:hover{border-color:rgba(255,255,255,0.1);}
+.dc.exp{border-color:rgba(232,66,15,0.22);}
+.dc.rdone{border-color:rgba(34,197,94,0.25)!important;}
+.dh{padding:13px 16px;display:flex;align-items:center;gap:12px;}
+.dn{font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:1;color:var(--m);min-width:44px;}
+.dc.exp .dn{color:var(--fire2);}
+.di{flex:1;}
+.dname{font-size:10px;color:var(--m);letter-spacing:2px;text-transform:uppercase;margin-bottom:1px;}
+.dtitle{font-weight:700;font-size:14px;}
+.dbadges{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;}
+.badge{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:100px;}
+.br{background:rgba(240,165,0,0.1);color:var(--gold);border:1px solid rgba(240,165,0,0.25);}
+.bm{background:rgba(232,66,15,0.1);color:var(--fire2);border:1px solid rgba(232,66,15,0.25);}
+.brest{background:rgba(56,189,248,0.08);color:var(--b);border:1px solid rgba(56,189,248,0.2);}
+.bw{background:rgba(34,197,94,0.08);color:var(--g);border:1px solid rgba(34,197,94,0.25);}
+.bdone{background:rgba(34,197,94,0.06);color:var(--g);border:1px solid rgba(34,197,94,0.18);}
+.chev{color:var(--m);font-size:15px;transition:transform 0.2s;}
+.dc.exp .chev{transform:rotate(180deg);color:var(--fire2);}
+.dcont{display:none;padding:0 16px 16px;border-top:1px solid var(--bd);}
+.dc.exp .dcont{display:block;}
+
+/* Day content components */
+.warmup{background:rgba(240,165,0,0.05);border:1px solid rgba(240,165,0,0.16);border-radius:10px;padding:12px 14px;display:flex;gap:12px;}
+.wu-dur{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);line-height:1;}
+.wu-steps{font-size:11px;color:var(--m);margin-top:3px;line-height:1.6;}
+.rest-info{background:rgba(56,189,248,0.04);border:1px solid rgba(56,189,248,0.15);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;margin-top:10px;}
+.run-box{background:rgba(240,165,0,0.04);border:1px solid rgba(240,165,0,0.13);border-radius:10px;padding:14px;}
+.run-type{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--gold);margin-bottom:10px;}
+.rs{display:flex;align-items:center;gap:10px;font-size:12px;margin-bottom:6px;}
+.rs-t{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);font-weight:700;margin-left:auto;white-space:nowrap;}
+.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;}
+.exc{background:var(--s2);border:1px solid var(--bd);border-radius:11px;overflow:hidden;}
+.exvis{height:110px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a0c14,#101828);}
+.exi{padding:10px;}
+.exn{font-weight:700;font-size:12px;margin-bottom:2px;}
+.exs{font-size:11px;color:var(--fire2);font-weight:600;}
+.exr{font-size:11px;color:var(--b);font-weight:600;margin-bottom:4px;}
+.extip{font-size:11px;color:var(--m);line-height:1.5;}
+.meal-grid-small{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;}
+.mcs{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:11px;}
+.mct{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--fire2);font-weight:700;margin-bottom:4px;}
+.mcn{font-weight:700;font-size:12px;margin-bottom:6px;}
+.mcl{list-style:none;display:flex;flex-direction:column;gap:2px;}
+.mcl li{font-size:11px;color:var(--m);display:flex;gap:4px;line-height:1.4;}
+.mcl li::before{content:'·';color:var(--fire2);flex-shrink:0;}
+.mckcal{margin-top:7px;padding-top:6px;border-top:1px solid var(--bd);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--g);font-weight:700;}
+.tipbox{background:rgba(168,85,247,0.07);border:1px solid rgba(168,85,247,0.17);border-radius:10px;padding:12px;display:flex;gap:10px;}
+.tipbox.fire{background:rgba(232,66,15,0.06);border-color:rgba(232,66,15,0.17);}
+.rest-box{background:rgba(56,189,248,0.04);border:1px solid rgba(56,189,248,0.13);border-radius:10px;padding:20px;text-align:center;}
+.done-btn-wrap{margin-top:16px;text-align:right;}
+.done-btn{padding:9px 18px;border-radius:9px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;transition:all 0.2s;border:1px solid;}
+.weigh-box{background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.18);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:center;margin-bottom:8px;}
+
+/* ── AVOID ─────────────────────────────── */
+.avoid-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.acol{border-radius:11px;padding:14px;}
+.acol.bad{background:rgba(232,66,15,0.05);border:1px solid rgba(232,66,15,0.18);}
+.acol.good{background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.18);}
+.acol-t{font-weight:800;font-size:12px;margin-bottom:9px;display:flex;align-items:center;gap:7px;}
+.acol.bad .acol-t{color:var(--fire2);}
+.acol.good .acol-t{color:var(--g);}
+.acol ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+.acol ul li{font-size:11px;color:var(--m);display:flex;gap:6px;line-height:1.5;}
+.acol.bad ul li::before{content:'✗';color:var(--fire);flex-shrink:0;}
+.acol.good ul li::before{content:'✓';color:var(--g);flex-shrink:0;}
+
+/* ── PROGRESS ─────────────────────────── */
+.prog{display:flex;flex-direction:column;gap:12px;}
+.pl{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;}
+.pl span:first-child{color:var(--m);}
+.pb{height:5px;background:var(--s3);border-radius:100px;overflow:hidden;}
+.pf{height:100%;border-radius:100px;transition:width 0.9s ease;}
+
+/* ── SCROLLTOP ─────────────────────────── */
+.stop{position:fixed;bottom:20px;right:20px;background:var(--fire);border:none;border-radius:50%;width:44px;height:44px;color:#fff;font-size:16px;cursor:pointer;box-shadow:0 4px 18px rgba(232,66,15,0.4);transition:all 0.2s;display:flex;align-items:center;justify-content:center;z-index:100;}
+.stop:hover{transform:translateY(-2px);}
+
+/* ── NOTIFICATION BANNER ─────────────── */
+.notif{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);
+  background:var(--s2);border:1px solid var(--bd);border-radius:12px;
+  padding:12px 20px;font-size:13px;font-weight:600;z-index:200;
+  transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.5);
+}
+.notif.show{transform:translateX(-50%) translateY(0);}
+
+@media(max-width:580px){
+  .ar-macros{grid-template-columns:repeat(2,1fr);}
+  .avoid-grid{grid-template-columns:1fr;}
+  .exgrid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-tag">Programme Personnalisé V5 · 6 Mois</div>
+  <h1>TRANS<br>FORM</h1>
+  <div class="hdr-sub">20 Avril → 20 Octobre 2026 · 90,4 kg → 78-82 kg · 🏁 Semi-Marathon Marcq-en-Barœul Septembre 2026</div>
+  <div class="stats">
+    <div><div class="stv">183</div><div class="stl">Jours</div></div>
+    <div><div class="stv">21,1</div><div class="stl">km objectif</div></div>
+    <div><div class="stv">22</div><div class="stl">Sem running</div></div>
+    <div><div class="stv">-12kg</div><div class="stl">Objectif</div></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab active" onclick="showTab('eau',this)">💧 Eau</button>
+  <button class="tab" onclick="showTab('strava',this)">🟠 Strava</button>
+  <button class="tab" onclick="showTab('rappels',this)">⏰ Rappels</button>
+  <button class="tab" onclick="showTab('poids',this)">⚖️ Pesées</button>
+  <button class="tab" onclick="showTab('programme',this)">📅 Programme</button>
+  <button class="tab" onclick="showTab('infos',this)">🚫 Aliments</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 1 : EAU
+══════════════════════════════════════ -->
+<div class="view active" id="view-eau">
+<div class="wrap">
+  <div class="water-card">
+    <div class="water-title">💧 Hydratation du Jour</div>
+    <div class="water-glasses" id="waterGlasses"></div>
+    <div class="water-info">
+      <div>
+        <div class="water-ml" id="waterMl">0 ml</div>
+        <div class="water-target">Objectif : 3 000 ml (3L) / jour</div>
+      </div>
+      <button class="water-reset" onclick="resetWater()">Réinitialiser</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl">📊 Historique Hydratation</div>
+    <div id="waterHistory" style="display:flex;flex-direction:column;gap:8px;"></div>
+  </div>
+  <div class="card">
+    <div style="font-size:13px;color:var(--m);line-height:1.8;">
+      <strong style="color:var(--b)">Pourquoi 3L/jour ?</strong><br>
+      L'eau accélère le métabolisme de 30% pendant 1h après ingestion. Elle améliore la combustion des graisses, réduit la rétention d'eau (paradoxalement), améliore les performances sportives et réduit la faim. Chaque gramme de sel retient 7g d'eau — boire plus aide à éliminer ce surplus.
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB STRAVA
+══════════════════════════════════════ -->
+<div class="view" id="view-strava">
+<div class="wrap">
+
+  <!-- Auth card -->
+  <div class="card" id="stravaAuthCard" style="display:none;">
+    <div style="text-align:center;padding:12px 0;">
+      <div style="font-size:48px;margin-bottom:12px;">🟠</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fc4c02;margin-bottom:8px;">CONNEXION STRAVA</div>
+      <div style="font-size:13px;color:var(--m);margin-bottom:20px;line-height:1.7;">Autorise l'accès à tes activités pour synchroniser ton programme.</div>
+      <button onclick="stravaAuth()" style="width:100%;padding:14px;background:linear-gradient(135deg,#fc4c02,#e34402);border:none;border-radius:12px;color:#fff;font-family:inherit;font-size:14px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 20px rgba(252,76,2,0.4);">
+        🔗 Se connecter à Strava
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div id="stravaLoading" style="display:none;" class="card">
+    <div style="text-align:center;padding:20px;">
+      <div class="spin" style="width:36px;height:36px;border:3px solid rgba(255,255,255,0.06);border-top-color:#fc4c02;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;"></div>
+      <div style="color:var(--m);font-size:13px;">Récupération de tes activités Strava...</div>
+    </div>
+  </div>
+
+  <!-- Athlete summary -->
+  <div id="stravaProfile" style="display:none;">
+    <div style="background:linear-gradient(135deg,rgba(252,76,2,0.12),rgba(252,76,2,0.04));border:1px solid rgba(252,76,2,0.25);border-radius:16px;padding:20px;margin-bottom:14px;display:flex;align-items:center;gap:14px;">
+      <img id="stravaAvatar" src="" style="width:56px;height:56px;border-radius:50%;border:2px solid rgba(252,76,2,0.4);" onerror="this.style.display='none'">
+      <div style="flex:1;">
+        <div id="stravaName" style="font-weight:800;font-size:16px;margin-bottom:2px;"></div>
+        <div id="stravaCity" style="font-size:12px;color:var(--m);margin-bottom:6px;"></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div id="stravaTotalKm" style="font-size:11px;color:#fc4c02;font-weight:700;"></div>
+          <div id="stravaRuns" style="font-size:11px;color:var(--m);"></div>
+        </div>
+      </div>
+      <button onclick="stravaDisconnect()" style="background:none;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px 10px;color:var(--m);font-size:11px;cursor:pointer;font-family:inherit;">Déco.</button>
+    </div>
+
+    <!-- Semaine courante vs plan -->
+    <div id="stravaWeekCard" class="card" style="border-color:rgba(252,76,2,0.2);"></div>
+
+    <!-- Comparaison allure -->
+    <div id="stravaPaceCard" class="card" style="border-color:rgba(56,189,248,0.2);"></div>
+
+    <!-- Activités récentes -->
+    <div class="card">
+      <div class="card-ttl" style="color:#fc4c02;">🏃 Activités Récentes</div>
+      <div id="stravaActivities"></div>
+    </div>
+
+    <!-- Progression semi -->
+    <div id="stravaRaceCard" class="card" style="border-color:rgba(240,165,0,0.2);"></div>
+  </div>
+
+  <!-- Error -->
+  <div id="stravaError" style="display:none;" class="card">
+    <div style="color:var(--fire2);font-size:13px;text-align:center;padding:12px;">
+      <div style="font-size:32px;margin-bottom:8px;">⚠️</div>
+      <div id="stravaErrorMsg"></div>
+      <button onclick="stravaRetry()" style="margin-top:12px;padding:10px 20px;background:rgba(232,66,15,0.1);border:1px solid rgba(232,66,15,0.3);border-radius:9px;color:var(--fire2);font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;">Réessayer</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 4 : RAPPELS
+══════════════════════════════════════ -->
+<div class="view" id="view-rappels">
+<div class="wrap">
+  <div class="card">
+    <div class="card-ttl">⏰ Mes Rappels Personnalisés</div>
+    <div style="background:rgba(240,165,0,0.06);border:1px solid rgba(240,165,0,0.18);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:var(--m);line-height:1.6;">
+      ⚠️ Les rappels nécessitent l'<strong style="color:var(--t)">autorisation des notifications</strong> dans ton navigateur. Clique sur "Activer" ci-dessous pour les recevoir même quand l'app est en arrière-plan.
+    </div>
+    <button onclick="requestNotifPermission()" style="width:100%;padding:12px;background:rgba(232,66,15,0.1);border:1px solid rgba(232,66,15,0.25);border-radius:10px;color:var(--fire2);font-family:Syne,sans-serif;font-weight:700;font-size:12px;cursor:pointer;letter-spacing:1px;margin-bottom:16px;">
+      🔔 Activer les Notifications
+    </button>
+    <div class="reminder-list" id="reminderList"></div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 5 : PESÉES
+══════════════════════════════════════ -->
+<div class="view" id="view-poids">
+<div class="wrap">
+  <div class="card">
+    <div class="card-ttl">⚖️ Suivi des Pesées — Chaque Lundi</div>
+    <div class="wgrid" id="weightGrid"></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl">📊 Progression</div>
+    <div class="prog" id="progressBars"></div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 6 : PROGRAMME
+══════════════════════════════════════ -->
+<div class="view" id="view-programme">
+<div class="wrap">
+  <div class="mnav" id="monthNav"></div>
+  <div id="calSection"></div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 7 : ALIMENTS
+══════════════════════════════════════ -->
+<div class="view" id="view-infos">
+<div class="wrap">
+  <div class="card">
+    <div class="card-ttl">🚫 Aliments & Boissons</div>
+    <div class="avoid-grid">
+      <div class="acol bad">
+        <div class="acol-t">❌ À éliminer</div>
+        <ul>
+          <li>Sodas, Coca, Fanta, Maltina, jus industriels</li>
+          <li>Alcool — bloque la lipolyse 48h</li>
+          <li>Pain blanc, viennoiseries, baguette</li>
+          <li>Frites, allioco frit, beignets</li>
+          <li>Chips, biscuits, gâteaux industriels</li>
+          <li>Cube Maggi/Jumbo en excès (trop de sel)</li>
+          <li>Huile de palme en grande quantité</li>
+          <li>Sucre dans café/thé</li>
+          <li>Fast-food, shawarma, pizza</li>
+          <li>Grignottage après 21h</li>
+        </ul>
+      </div>
+      <div class="acol good">
+        <div class="acol-t">✅ À privilégier</div>
+        <ul>
+          <li>Eau plate 3L/jour + tisane gingembre-citron</li>
+          <li>Thé vert non sucré</li>
+          <li>Poisson braisé, poulet grillé/bouilli</li>
+          <li>Ndolé (protéines végétales)</li>
+          <li>Haricots rouges / niébé</li>
+          <li>Plantain bouilli (pas frit)</li>
+          <li>Macabo / taro bouillis</li>
+          <li>Légumes-feuilles (manioc, épinards)</li>
+          <li>Huile d'olive (petite quantité)</li>
+          <li>Arachides non salées (poignée)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="border-color:rgba(240,165,0,0.18)">
+    <div class="card-ttl" style="color:var(--gold)">⏰ Ton Planning Repas — Entraînement 5H</div>
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:8px 14px;align-items:center;font-size:13px;">
+      <span style="font-family:JetBrains Mono,monospace;font-weight:700;color:var(--fire2)">05H00</span><span style="color:var(--m)">🏋️ Entraînement</span>
+      <span style="font-family:JetBrains Mono,monospace;font-weight:700;color:var(--gold)">07H00</span><span style="color:var(--m)">🥚 Petit-déjeuner — 4 œufs + avoine + fruit</span>
+      <span style="font-family:JetBrains Mono,monospace;font-weight:700;color:var(--gold)">12H30</span><span style="color:var(--m)">🍽️ Déjeuner — repas camerounais</span>
+      <span style="font-family:JetBrains Mono,monospace;font-weight:700;color:var(--gold)">16H00</span><span style="color:var(--m)">🥜 Collation pré-entraînement (si 2ème séance) ou snack</span>
+      <span style="font-family:JetBrains Mono,monospace;font-weight:700;color:var(--gold)">19H30</span><span style="color:var(--m)">🌙 Dîner — protéines + légumes, pas de glucides simples</span>
+      <span style="font-family:JetBrains Mono,monospace;font-weight:700;color:var(--b)">21H00</span><span style="color:var(--m)">😴 Coucher — 8h de sommeil avant 5h</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="notif" id="notif"></div>
+<button class="stop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════════════════════════
+const LS = {
+  get: (k,d={}) => { try { return JSON.parse(localStorage.getItem('ftv3_'+k)) ?? d; } catch{return d;} },
+  set: (k,v) => localStorage.setItem('ftv3_'+k, JSON.stringify(v))
+};
+
+// ══════════════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════════════
+function showTab(name, el) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+  if(name==='eau') renderWater();
+  if(name==='strava') stravaInit();
+  if(name==='rappels') renderReminders();
+  if(name==='poids') { buildWeightTracker(); buildProgress(); }
+  if(name==='programme') { buildNav(); buildCal(); }
+}
+
+// ══════════════════════════════════════════════════════════
+// NOTIFICATION
+// ══════════════════════════════════════════════════════════
+function showNotif(msg, dur=3000) {
+  const el=document.getElementById('notif');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),dur);
+}
+
+async function requestNotifPermission() {
+  if(!('Notification' in window)){showNotif('❌ Notifications non supportées sur ce navigateur');return;}
+  const p=await Notification.requestPermission();
+  if(p==='granted'){showNotif('✅ Notifications activées !');}
+  else{showNotif('⚠️ Notifications refusées dans les paramètres du navigateur');}
+}
+
+function sendNotif(title, body, icon='🏋️') {
+  if(Notification.permission==='granted'){
+    new Notification(icon+' '+title,{body,icon:'/favicon.ico'});
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// REMINDERS
+// ══════════════════════════════════════════════════════════
+const DEFAULT_REMINDERS = [
+  {id:'sport1',ico:'🏃',title:'Séance Running',        desc:'Échauffement 5 min — let\'s go !',                time:'05:00',on:true},
+  {id:'sport2',ico:'💪',title:'Séance Musculation',     desc:'Poids du corps — let\'s go !',                   time:'05:00',on:true},
+  {id:'water1',ico:'💧',title:'Boire de l\'eau',        desc:'500ml dès la fin du sport',                      time:'06:00',on:true},
+  {id:'breakf',ico:'🥚',title:'Petit-déjeuner',         desc:'4 œufs + avoine + fruit — carburant du matin',   time:'07:00',on:true},
+  {id:'water2',ico:'💧',title:'Boire de l\'eau',        desc:'Rappel hydratation matinale',                    time:'09:00',on:true},
+  {id:'water3',ico:'💧',title:'Boire de l\'eau',        desc:'Rappel hydratation',                             time:'11:00',on:true},
+  {id:'lunch', ico:'🍽️',title:'Déjeuner',               desc:'Repas camerounais du midi',                      time:'12:30',on:true},
+  {id:'water4',ico:'💧',title:'Boire de l\'eau',        desc:'Rappel hydratation après-midi',                  time:'14:30',on:true},
+  {id:'snack', ico:'🥜',title:'Collation pré-entraînem.',desc:'Prépare ton corps pour le sport',               time:'16:00',on:true},
+  {id:'water5',ico:'💧',title:'Boire de l\'eau',        desc:'Rappel hydratation fin d\'après-midi',           time:'18:00',on:true},
+  {id:'dinner',ico:'🌙',title:'Dîner',                  desc:'Dernier repas — protéines + légumes',            time:'19:30',on:true},
+  {id:'sleep', ico:'😴',title:'Coucher',                desc:'8h de sommeil — réveil 5h → coucher 21h max',    time:'21:00',on:true},
+];
+
+let reminders = LS.get('reminders', DEFAULT_REMINDERS);
+let reminderIntervals = {};
+
+function saveReminders(){ LS.set('reminders', reminders); }
+
+function renderReminders(){
+  const list=document.getElementById('reminderList');
+  list.innerHTML='';
+  reminders.forEach((r,i)=>{
+    const div=document.createElement('div');
+    div.className='reminder-item';
+    div.innerHTML=`
+      <div class="rem-ico">${r.ico}</div>
+      <div class="rem-info">
+        <div class="rem-title">${r.title}</div>
+        <input type="time" class="time-input" value="${r.time}" onchange="updateReminderTime(${i},this.value)">
+      </div>
+      <div class="rem-toggle ${r.on?'on':''}" onclick="toggleReminder(${i},this)"></div>
+    `;
+    list.appendChild(div);
+  });
+  setupReminderChecks();
+}
+
+function toggleReminder(i, el){
+  reminders[i].on=!reminders[i].on;
+  el.classList.toggle('on',reminders[i].on);
+  saveReminders();
+  showNotif(reminders[i].on?'🔔 Rappel activé':'🔕 Rappel désactivé');
+}
+function updateReminderTime(i, val){
+  reminders[i].time=val;
+  saveReminders();
+  setupReminderChecks();
+}
+
+function setupReminderChecks(){
+  if(reminderIntervals.main) clearInterval(reminderIntervals.main);
+  reminderIntervals.main = setInterval(()=>{
+    const now=new Date();
+    const hm=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    reminders.forEach(r=>{
+      if(r.on && r.time===hm){
+        showNotif(`${r.ico} ${r.title}`, 5000);
+        sendNotif(r.title, r.desc, r.ico);
+      }
+    });
+  }, 60000);
+}
+
+// ══════════════════════════════════════════════════════════
+// WATER TRACKER
+// ══════════════════════════════════════════════════════════
+let todayKey = () => new Date().toISOString().split('T')[0];
+let waterData = LS.get('water', {});
+
+function renderWater(){
+  const key=todayKey();
+  if(!waterData[key]) waterData[key]=0;
+  const glasses=Math.floor(waterData[key]/250);
+  const container=document.getElementById('waterGlasses');
+  container.innerHTML='';
+  for(let i=0;i<12;i++){
+    const g=document.createElement('div');
+    g.className='glass'+(i<glasses?' filled':'');
+    g.innerHTML='<span>🥛</span>';
+    g.title='250ml';
+    g.onclick=()=>addWater(250, key);
+    container.appendChild(g);
+  }
+  document.getElementById('waterMl').textContent=waterData[key]+' ml';
+
+  // History
+  const hist=document.getElementById('waterHistory');
+  const dates=Object.keys(waterData).sort().reverse().slice(0,7);
+  hist.innerHTML=dates.map(d=>{
+    const pct=Math.min(100,Math.round(waterData[d]/30));
+    const label=d===todayKey()?'Aujourd\'hui':d;
+    return`<div style="display:flex;align-items:center;gap:10px;font-size:12px">
+      <span style="color:var(--m);min-width:90px">${label}</span>
+      <div style="flex:1;height:6px;background:var(--s3);border-radius:100px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--b),#67e8f9);border-radius:100px"></div>
+      </div>
+      <span style="color:var(--b);font-family:JetBrains Mono,monospace;font-weight:700;min-width:60px;text-align:right">${waterData[d]} ml</span>
+    </div>`;
+  }).join('');
+}
+
+function addWater(ml, key){
+  if(!waterData[key]) waterData[key]=0;
+  waterData[key]=Math.min(3000,waterData[key]+ml);
+  LS.set('water',waterData);
+  renderWater();
+  if(waterData[key]>=3000) showNotif('🎉 Objectif hydratation atteint !');
+}
+
+function resetWater(){
+  waterData[todayKey()]=0;
+  LS.set('water',waterData);
+  renderWater();
+}
+
+// ══════════════════════════════════════════════════════════
+// DATA — PROGRAMME
+// ══════════════════════════════════════════════════════════
+const MONTHS=[
+  {name:"Avril",year:2026,mNum:4,startD:20,endD:30,phase:1,runPhase:"base",phaseDesc:"Adaptation · Construction des habitudes"},
+  {name:"Mai",year:2026,mNum:5,startD:1,endD:31,phase:1,runPhase:"base",phaseDesc:"Base aérobie · Sorties 5-8 km"},
+  {name:"Juin",year:2026,mNum:6,startD:1,endD:30,phase:2,runPhase:"build",phaseDesc:"Développement · Sorties 8-12 km"},
+  {name:"Juillet",year:2026,mNum:7,startD:1,endD:31,phase:2,runPhase:"build",phaseDesc:"Progression · Sorties 12-16 km"},
+  {name:"Août",year:2026,mNum:8,startD:1,endD:31,phase:3,runPhase:"peak",phaseDesc:"Pic de forme · Sorties 16-19 km"},
+  {name:"Septembre",year:2026,mNum:9,startD:1,endD:30,phase:3,runPhase:"taper",phaseDesc:"Affûtage + 🏁 Semi-Marathon Marcq-en-Barœul"},
+  {name:"Octobre",year:2026,mNum:10,startD:1,endD:20,phase:3,runPhase:"recovery",phaseDesc:"Récupération active post-course"}
+];
+
+// Date du semi-marathon (à adapter selon l'organisateur)
+const RACE_DATE = "2026-09-20";
+const RACE_NAME = "Semi-Marathon de Marcq-en-Barœul";
+
+const DNAMES=["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+const SCHED={0:"rest",1:"run_hiit",2:"chest",3:"run_endurance",4:"back",5:"run_pyramid",6:"legs_core"};
+
+// ── PETIT-DÉJEUNER V1 (même chaque matin) ──
+const BREAKFAST = {time:"07H00",name:"Petit-déjeuner",items:["4 œufs brouillés","80g flocons d'avoine + cannelle","1 fruit (banane ou pomme)","Café noir ou thé vert sans sucre"],kcal:"~580 kcal"};
+
+// ── CAMEROUNAIS ROTATIONS (Déjeuner + Dîner, 7 rotations) ──
+const CAM=[
+  { // 0 - Lundi
+    lunch:{time:"12H30",name:"Déjeuner",items:["Ndolé au poulet (portion moy.)","150g riz ou macabo bouilli","Légumes sautés huile d'olive"],kcal:"~680 kcal"},
+    snack:{time:"16H00",name:"Collation",items:["2 œufs durs","1 fruit de saison","500ml eau citronnée"],kcal:"~220 kcal"},
+    dinner:{time:"19H30",name:"Dîner",items:["Tilapia ou bar braisé 200g","Légumes feuilles sautés (épinards, amarante)","Eau plate, pas de glucides"],kcal:"~480 kcal"}
+  },
+  { // 1 - Mardi
+    lunch:{time:"12H30",name:"Déjeuner",items:["Poulet DG version légère (peu d'huile)","200g plantain bouilli (pas frit)","Salade tomates/concombres/oignons"],kcal:"~650 kcal"},
+    snack:{time:"16H00",name:"Collation",items:["Poignée d'arachides non salées (30g)","1 pomme ou goyave","Eau plate 500ml"],kcal:"~240 kcal"},
+    dinner:{time:"19H30",name:"Dîner",items:["Haricots rouges/niébé épicé (sans huile)","200g feuilles de manioc vapeur","Tisane gingembre-citron"],kcal:"~420 kcal"}
+  },
+  { // 2 - Mercredi
+    lunch:{time:"12H30",name:"Déjeuner",items:["Eru/Okok au poisson fumé (portion moy.)","150g macabo ou taro bouilli","Eau plate 500ml"],kcal:"~620 kcal"},
+    snack:{time:"16H00",name:"Collation",items:["150g yaourt nature sans sucre","1 fruit (ananas frais)","20g noix de cajou"],kcal:"~250 kcal"},
+    dinner:{time:"19H30",name:"Dîner",items:["Poisson en sauce tomate légère 180g","Légumes vapeur (épinards)","Tisane citronnelle"],kcal:"~460 kcal"}
+  },
+  { // 3 - Jeudi
+    lunch:{time:"12H30",name:"Déjeuner",items:["Dinde ou pintade grillée 200g","150g couscous de maïs camerounais","Légumes grillés (courgette, poivron, carotte)"],kcal:"~660 kcal"},
+    snack:{time:"16H00",name:"Collation",items:["2 œufs durs","Concombre + carotte crus","Eau plate 500ml"],kcal:"~200 kcal"},
+    dinner:{time:"19H30",name:"Dîner",items:["Sauté légumes + crevettes ou sardines","Feuilles patate douce vapeur","Tisane gingembre-citron"],kcal:"~440 kcal"}
+  },
+  { // 4 - Vendredi
+    lunch:{time:"12H30",name:"Déjeuner",items:["Koki (haricots vapeur) portion normale","Poisson braisé 150g","Légumes vapeur (brocoli, haricots verts)"],kcal:"~600 kcal"},
+    snack:{time:"16H00",name:"Collation",items:["Arachides bouillies 30g","1 goyave ou mangue","Eau plate 500ml"],kcal:"~230 kcal"},
+    dinner:{time:"19H30",name:"Dîner",items:["Poulet vapeur ou grillé 200g","Grande salade (laitue, tomates, oignons)","Citron + huile d'olive"],kcal:"~450 kcal"}
+  },
+  { // 5 - Samedi
+    lunch:{time:"12H30",name:"Déjeuner",items:["Mbongo tchobi poulet — portion moy.","150g igname ou patate douce bouillie","Légumes feuilles vapeur"],kcal:"~670 kcal"},
+    snack:{time:"16H00",name:"Collation",items:["2 œufs durs","30g noix de cajou ou amandes","Eau citronnée 500ml"],kcal:"~260 kcal"},
+    dinner:{time:"19H30",name:"Dîner",items:["Tilapia braisé ou soupe poisson fumé","Légumes sautés (épinards, aubergine)","Pas de glucides"],kcal:"~500 kcal"}
+  },
+  { // 6 - Dimanche repos
+    lunch:{time:"13H00",name:"Déjeuner",items:["Palmnut soup (banga) au poisson — portion réduite","100g riz ou macabo","Beaucoup d'eau plate"],kcal:"~580 kcal"},
+    snack:{time:"16H00",name:"Collation",items:["Fruits frais saison (papaye, ananas, mangue)","Eau plate"],kcal:"~150 kcal"},
+    dinner:{time:"19H30",name:"Dîner",items:["Soupe légumes maison (carotte, courgette, épinards)","100g poisson ou œufs","Tisane digestive"],kcal:"~380 kcal"}
+  }
+];
+
+
+const SESSIONS={
+  rest:{type:"rest",title:"Repos Complet 😴"},
+  run_hiit:{type:"running",title:"Running — HIIT / Fractionné",
+    warmup:{dur:"10 min",steps:"Marche 3 min · Trot léger 3 min · Talons-fesses · Montées de genoux · Accélérations progressives"},
+    tip:"Le fractionné = vitesse + endurance. Clé pour finir le semi en forme."},
+  run_endurance:{type:"running",title:"Running — Sortie Longue",
+    warmup:{dur:"8 min",steps:"Marche dynamique 3 min · Trot très lent 3 min · Étirements debout · Rotations hanches"},
+    tip:"La sortie longue = coeur du programme semi. Cours lentement pour aller loin. Hydrate-toi toutes les 15 min."},
+  run_pyramid:{type:"running",title:"Running — Tempo / Seuil",
+    warmup:{dur:"10 min",steps:"Marche 2 min · Trot léger 5 min · 3 accélérations progressives de 30 sec"},
+    tip:"Le tempo renforce le seuil anaérobie — tu cours plus vite sans t'essouffler le jour J."},
+  chest:{type:"muscle",title:"Poitrine · Triceps · Épaules",
+    warmup:{dur:"5 min",steps:"Rotations épaules · Bras en croix · 10 pompes légères"},
+    restInfo:"Sem 1-4 : 60 sec de repos entre séries · Sem 5+ : 45 sec",
+    exercises:[
+      {n:"Pompes Classiques",s:"4x15 reps",r:"Repos 60 sec",tip:"Descente lente 3s, montée explosive. Corps planche.",svg:"pushup"},
+      {n:"Pompes Diamant",s:"3x12 reps",r:"Repos 60 sec",tip:"Mains en triangle. Coudes collés. Cible triceps.",svg:"diamond_pushup"},
+      {n:"Pompes Déclinées",s:"3x12 reps",r:"Repos 60 sec",tip:"Pieds sur canapé/lit. Poitrine haute.",svg:"decline_pushup"},
+      {n:"Pompes Archer",s:"3x10 reps",r:"Repos 75 sec",tip:"Mains écartées, penche latéralement. Difficile.",svg:"archer_pushup"},
+      {n:"Pike Push-Up",s:"3x12 reps",r:"Repos 60 sec",tip:"V inversé, tête vers le sol. Épaules.",svg:"pike_pushup"},
+      {n:"Pompes Explosives",s:"3x10 reps",r:"Repos 75 sec",tip:"Décolle les mains. Atterris souple.",svg:"explosive_pushup"},
+    ]},
+  back:{type:"muscle",title:"Dos · Biceps · Chaîne Postérieure",
+    warmup:{dur:"5 min",steps:"Rotations épaules arrière x 15 · Chat/vache x 10 · Étirements thoraciques"},
+    restInfo:"Sem 1-4 : 75 sec · Sem 5+ : 60 sec entre séries",
+    exercises:[
+      {n:"Superman",s:"4x15 reps",r:"Repos 60 sec",tip:"Bras + jambes simultanément. Tiens 2s en haut.",svg:"superman"},
+      {n:"Superman Unilatéral",s:"3x12 par côté",r:"Repos 60 sec",tip:"Bras droit + jambe gauche. Stabilise.",svg:"superman_uni"},
+      {n:"Reverse Snow Angel",s:"3x15 reps",r:"Repos 60 sec",tip:"Ventre au sol, arc avec les bras. Serre les omoplates.",svg:"snow_angel"},
+      {n:"Pompes en Y",s:"3x12 reps",r:"Repos 60 sec",tip:"Mains en Y très écartées. Grand dorsal.",svg:"y_pushup"},
+      {n:"Good Morning",s:"3x20 reps",r:"Repos 60 sec",tip:"Mains nuque, penche avant (dos droit). Ischio.",svg:"good_morning"},
+      {n:"Curl Isométrique",s:"3x15 reps",r:"Repos 60 sec",tip:"Croise les mains, tire vers le haut avec résistance.",svg:"iso_curl"},
+    ]},
+  legs_core:{type:"muscle",title:"Jambes · Fessiers · CORE",
+    warmup:{dur:"8 min",steps:"Rotations hanches · Fentes statiques · Squats légers x 15 · Genoux hauts x 20"},
+    restInfo:"Jambes : 90 sec (Sem 1-4) puis 60 sec · Core : toujours 45 sec",
+    exercises:[
+      {n:"Squats Classiques",s:"4x20 reps",r:"Repos 90 sec",tip:"Cuisses parallèles, dos droit. Descente 3s. Sem 1-4 : 4x15.",svg:"squat"},
+      {n:"Fentes Marchées",s:"4x20 (10/jambe)",r:"Repos 75 sec",tip:"Grand pas, genou arrière 2cm du sol. Alterne G/D.",svg:"lunge"},
+      {n:"Squats Sautés",s:"3x15 reps",r:"Repos 90 sec",tip:"Explose en hauteur, atterris souple genoux fléchis.",svg:"jump_squat"},
+      {n:"Glute Bridge",s:"4x20 reps",r:"Repos 60 sec",tip:"Pousse hanches vers le haut. Serre fessiers 2s.",svg:"glute_bridge"},
+      {n:"Wall Sit",s:"3x45 sec",r:"Repos 75 sec",tip:"Dos au mur, cuisses parallèles. Isométrique.",svg:"wall_sit"},
+      {n:"Planche Frontale",s:"4x45-60 sec",r:"Repos 45 sec",tip:"Corps parfaitement droit. Rentre le ventre.",svg:"plank"},
+      {n:"Crunchs Bicycle",s:"3x20 reps",r:"Repos 45 sec",tip:"Coude droit vers genou gauche. Lent et contrôlé.",svg:"bicycle"},
+      {n:"Leg Raises",s:"4x15 reps",r:"Repos 45 sec",tip:"Jambes tendues, descente lente. Ne touche pas le sol.",svg:"leg_raise"},
+      {n:"Mountain Climbers",s:"3x30 sec",r:"Repos 45 sec",tip:"Hanches stables, genoux vers poitrine rapide.",svg:"mountain_climber"},
+      {n:"Russian Twists",s:"3x20 reps",r:"Repos 45 sec",tip:"Buste 45 degrés, rotation G/D. Pieds décollés.",svg:"russian_twist"},
+    ]}
+};
+
+// ── PLAN RUNNING PROGRESSIF 22 SEMAINES — Semi-Marathon Marcq-en-Barœul ──
+// Profil : Coureur expérimenté en reconversion (717 km historique, meilleure allure 4'56"/km en 2021)
+// Allure actuelle réelle : 4'40-5'00"/km sur 4-6 km | Objectif semi : 5'00-5'15"/km | Cible : 1h45-1h52
+// Chaussure : Kiprun Kipride (mousse Fastech, drop 6mm, 243g) — parfaite pour ce programme
+const RUN_PLAN=[
+  // SEM 1 — Remise en route (pas de découverte, tu as un historique)
+  {hiit:{label:"HIIT Remise en Route",steps:[{i:"🚶",t:"Marche échauffement",d:"5 min"},{i:"🏃",t:"Trot léger 6'30\"/km (test nouvelles chaussures)",d:"5 min"},{i:"💨",t:"Sprint 75% — environ 4'50\"/km",d:"30 sec"},{i:"🚶",t:"Marche récup",d:"90 sec"},{i:"🔁",t:"Répéter",d:"x6"},{i:"🧘",t:"Retour calme",d:"5 min"}],dist:"~5 km",conseil:"Regel absolue : bride-toi a 6'00-6'30\"/km entre les sprints. Ton erreur vendredi = partir trop vite trop tot. Les nouvelles Kipride vont changer tes sensations — laisse-les s'adapter."},
+   endurance:{label:"Sortie 35 min — Allure Bridee",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course LENTE 6'00-6'30\"/km — surveille ton allure !",d:"35 min"},{i:"🧘",t:"Retour calme + etirements mollets 10 min",d:"10 min"}],dist:"5-6 km",conseil:"PRIORITE ABSOLUE : ne depasse pas 6'00\"/km meme si c'est trop lent mentalement. Ton corps revient de loin sur les 2 dernieres annees. La patience ici = performance en septembre."},
+   tempo:{label:"Tempo 20 min — Premier Seuil",steps:[{i:"🚶",t:"Echauffement 8 min",d:"8 min"},{i:"🏃",t:"Allure seuil 5'20-5'30\"/km — inconfortable mais tenu",d:"20 min"},{i:"🧘",t:"Retour calme",d:"7 min"}],dist:"5-6 km",conseil:"Ton seuil reel est vers 5'10-5'25\"/km vu ton historique. 5'30\" c'est la bonne zone pour commencer sans se blesser."}},
+  // SEM 2 — Confirmation
+  {hiit:{label:"HIIT 30/90 — Vitesse",steps:[{i:"🚶",t:"Marche echauffement",d:"5 min"},{i:"💨",t:"Sprint 80% — environ 4'40-4'50\"/km",d:"30 sec"},{i:"🚶",t:"Marche recup",d:"90 sec"},{i:"🔁",t:"Repeter",d:"x7"},{i:"🧘",t:"Retour calme",d:"5 min"}],dist:"~6 km",conseil:"Tu peux tenir 4'40-4'50\"/km sur 30s — on l'a vu sur ton split km 2. C'est ta zone de sprint naturelle."},
+   endurance:{label:"Sortie Continue 40 min",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course continue 6'00-6'20\"/km — rythme de conversation",d:"40 min"},{i:"🧘",t:"Etirements 10 min",d:"10 min"}],dist:"6-7 km",conseil:"40 min en continu a 6'10\"/km = ta base. Si tu dois marcher, ralentis mais ne t'arrete pas. Les Kipride absorbent bien — profites-en."},
+   tempo:{label:"Tempo 22 min",steps:[{i:"🚶",t:"Echauffement 8 min",d:"8 min"},{i:"🏃",t:"Allure seuil 5'15-5'25\"/km",d:"22 min"},{i:"🧘",t:"Retour calme",d:"8 min"}],dist:"6-7 km",conseil:"Semaine 2 : ton cardio se reveille vite. La memoire musculaire est intacte depuis 2021."}},
+  // SEM 3 — Confirmation suite
+  {hiit:{label:"HIIT 30/60 — Intensite",steps:[{i:"🚶",t:"Echauffement",d:"7 min"},{i:"💨",t:"Sprint 85% — 4'30-4'50\"/km",d:"30 sec"},{i:"🏃",t:"Trot recup 6'30\"/km",d:"60 sec"},{i:"🔁",t:"Repeter",d:"x8"},{i:"🧘",t:"Retour calme",d:"6 min"}],dist:"~7 km",conseil:"Recup active au trot plutot qu'a la marche — tu peux. 8 repetitions = ton niveau reel."},
+   endurance:{label:"Sortie 45 min",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course 6'00-6'20\"/km — bride-toi encore",d:"45 min"},{i:"🧘",t:"Etirements",d:"10 min"}],dist:"7-8 km",conseil:"45 min continus a cette allure = equivalent 7 km. La base se construit. N'accelere pas."},
+   tempo:{label:"Tempo 25 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure seuil 5'10-5'20\"/km",d:"25 min"},{i:"🧘",t:"Retour calme",d:"5 min"}],dist:"7-8 km",conseil:"Tu remarques que le tempo devient plus confortable ? C'est normal — la reconversion est rapide sur un coureur experimente."}},
+  // SEM 4 — Premier bilan
+  {hiit:{label:"Intervalles 400m — Retour en Piste",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"💨",t:"400m rapide (environ 4'30-4'45\"/km)",d:"~2 min"},{i:"🏃",t:"Trot recup 400m",d:"~2 min"},{i:"🔁",t:"Repeter",d:"x6"},{i:"🧘",t:"Retour calme",d:"8 min"}],dist:"~8 km",conseil:"Semaine 4 : on introduit les vrais intervalles. 6 x 400m a 4'30-4'45\"/km — ta zone naturelle de vitesse."},
+   endurance:{label:"Sortie 50 min — Cap Important",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course continue 6'00-6'20\"/km",d:"50 min"},{i:"🧘",t:"Etirements 12 min",d:"12 min"}],dist:"8-9 km",conseil:"50 min en continu ! A cette allure tu couvres 8 km. Dans 18 semaines tu en courras 21. La progression est mathematique."},
+   tempo:{label:"Tempo 28 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure seuil 5'10-5'20\"/km",d:"28 min"},{i:"🧘",t:"Retour calme",d:"8 min"}],dist:"8-9 km",conseil:"28 min de tempo a 5'15\"/km = tu repasses progressivement a ton niveau 2021. Bravo !"}},
+  // SEM 5
+  {hiit:{label:"Fartlek 1",steps:[{i:"🚶",t:"Echauffement",d:"8 min"},{i:"🏃",t:"Trot de base 6'20\"/km",d:"5 min"},{i:"💨",t:"Acceleration 85% — 4'45\"/km",d:"1 min"},{i:"🏃",t:"Trot recup",d:"2 min"},{i:"🔁",t:"Repeter",d:"x5"},{i:"🧘",t:"Retour calme",d:"7 min"}],dist:"~8 km",conseil:"Fartlek = jeu de vitesse. Tu geres l'intensite au ressenti. Parfait pour retrouver les sensations."},
+   endurance:{label:"Sortie 55 min",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course lente 6'00-6'20\"/km",d:"55 min"},{i:"🧘",t:"Etirements",d:"10 min"}],dist:"9-10 km",conseil:"Tu approches les 10 km ! L'endurance revient vite sur un corps qui a deja couru 717 km."},
+   tempo:{label:"Tempo 30 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure seuil 5'10-5'20\"/km",d:"30 min"},{i:"🧘",t:"Retour calme",d:"8 min"}],dist:"9-10 km",conseil:"30 min de tempo = niveau serieux. Tu y es des la semaine 5."}},
+  // SEM 6
+  {hiit:{label:"Fartlek 2 — Collines",steps:[{i:"🚶",t:"Echauffement",d:"8 min"},{i:"🏃",t:"Trot base",d:"5 min"},{i:"💨",t:"Sprint 85% — 4'40\"/km",d:"90 sec"},{i:"🏃",t:"Trot recup",d:"2 min"},{i:"🔁",t:"Repeter",d:"x5"},{i:"🧘",t:"Retour calme",d:"7 min"}],dist:"~9 km",conseil:"90 sec de sprint — tu construis ta resistance a l'effort prolonge. Ce volume de sprint est ce qui te donnera de la reserve sur le semi."},
+   endurance:{label:"Sortie 60 min",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course lente 6'00-6'20\"/km",d:"60 min"},{i:"🧘",t:"Etirements",d:"12 min"}],dist:"10-11 km",conseil:"1 heure de course ! Tu es revenu a ton niveau de 2021 en endurance fondamentale."},
+   tempo:{label:"Tempo 32 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure seuil 5'10-5'20\"/km",d:"32 min"},{i:"🧘",t:"Retour calme",d:"8 min"}],dist:"10-11 km",conseil:"La regularite de l'allure prime sur la vitesse."}},
+  // SEM 7
+  {hiit:{label:"Intervalles 600m",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"💨",t:"600m a 4'40-4'50\"/km",d:"~3 min"},{i:"🏃",t:"Trot recup 400m",d:"~2 min"},{i:"🔁",t:"Repeter",d:"x6"},{i:"🧘",t:"Retour calme",d:"8 min"}],dist:"~11 km",conseil:"600m = la distance qui developpe le mieux l'endurance a haute intensite. Ton corps les gere bien."},
+   endurance:{label:"Sortie 65 min",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course continue 6'00-6'20\"/km",d:"65 min"},{i:"🧘",t:"Etirements",d:"12 min"}],dist:"11-12 km",conseil:"Tu cours plus d'1h ! Le semi-marathon devient concret."},
+   tempo:{label:"Tempo 35 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure seuil 5'05-5'15\"/km",d:"35 min"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"11-12 km",conseil:"On affine l'allure seuil vers 5'10\"/km — ton niveau naturel revient."}},
+  // SEM 8 — RECUPERATION
+  {hiit:{label:"HIIT Leger — Recuperation",steps:[{i:"🚶",t:"Marche",d:"5 min"},{i:"💨",t:"Sprint 70% — 5'00\"/km environ",d:"20 sec"},{i:"🚶",t:"Marche recup",d:"2 min"},{i:"🔁",t:"Repeter — pas a fond",d:"x5"},{i:"🧘",t:"Retour calme",d:"8 min"}],dist:"~5 km",conseil:"Semaine de recuperation obligatoire. Volume -30%. C'est scientifiquement prouve : les gains se consolident pendant la recuperation, pas pendant l'effort."},
+   endurance:{label:"Sortie Recuperation 40 min",steps:[{i:"🚶",t:"Marche 5 min",d:"5 min"},{i:"🏃",t:"Trot tres lent 6'30-7'00\"/km",d:"40 min"},{i:"🧘",t:"Etirements longs 15 min",d:"15 min"}],dist:"6-7 km",conseil:"Cours lentement. Profite du paysage. Les Kipride sont faites pour ca."},
+   tempo:{label:"Footing Facile",steps:[{i:"🚶",t:"Marche 5 min",d:"5 min"},{i:"🏃",t:"Footing confort 6'20\"/km",d:"25 min"},{i:"🧘",t:"Etirements",d:"10 min"}],dist:"5-6 km",conseil:"Pas de tempo cette semaine. Recupere. Le pic de forme arrive dans 10 semaines."}},
+  // SEM 9 — PHASE DEVELOPPEMENT
+  {hiit:{label:"Intervalles 800m",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"💨",t:"800m a 4'40-4'50\"/km",d:"~4 min"},{i:"🏃",t:"Trot recup 400m",d:"~2 min"},{i:"🔁",t:"Repeter",d:"x5"},{i:"🧘",t:"Retour calme",d:"8 min"}],dist:"~12 km",conseil:"Phase developpement ! Les 800m sont la distance reine pour un semi-marathonien."},
+   endurance:{label:"Sortie 70 min",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course lente 5'55-6'15\"/km",d:"70 min"},{i:"🧘",t:"Etirements",d:"12 min"}],dist:"12-13 km",conseil:"On commence a reduire l'allure des longues vers 6'00\"/km. Les km s'accumulent."},
+   tempo:{label:"Tempo 38 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure seuil 5'05-5'15\"/km",d:"38 min"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"12-13 km",conseil:"Ton seuil s'affine. Tu recuperes de plus en plus vite apres l'effort."}},
+  // SEM 10
+  {hiit:{label:"Fartlek Collines",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Trot base 6'10\"/km",d:"5 min"},{i:"💨",t:"Montee acceleree — 4'40\"/km",d:"45 sec"},{i:"🏃",t:"Descente recup",d:"90 sec"},{i:"🔁",t:"Repeter",d:"x7"},{i:"🧘",t:"Retour calme",d:"8 min"}],dist:"~12 km",conseil:"Les montees renforcent mollets et fessiers. Le parcours de Marcq peut avoir du relief — prepares-toi."},
+   endurance:{label:"Sortie 75 min",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course 5'55-6'15\"/km",d:"75 min"},{i:"🧘",t:"Etirements",d:"12 min"}],dist:"13-14 km",conseil:"75 min — tu es a 85% de la duree du semi cible. La confiance s'installe."},
+   tempo:{label:"Tempo 40 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure seuil 5'05-5'15\"/km",d:"40 min"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"13-14 km",conseil:"40 min de tempo a 5'10\"/km — c'est ton niveau 2021 qui revient."}},
+  // SEM 11 — TEST 10 KM
+  {hiit:{label:"Intervalles 1 km",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"💨",t:"1 km a 4'45-5'00\"/km",d:"~5 min"},{i:"🏃",t:"Trot recup",d:"2 min 30"},{i:"🔁",t:"Repeter",d:"x5"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"~14 km",conseil:"5 x 1 km a 4'50\"/km = tu simules l'allure cible du semi ! Ecoute tes sensations."},
+   endurance:{label:"TEST 10 km — Allure Libre",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"10 km a allure CONFORTABLEMENT difficile",d:"~50-55 min"},{i:"🧘",t:"Etirements 15 min",d:"15 min"}],dist:"10 km",conseil:"TEST CLe : cours 10 km a fond confortable. Ce temps x 2 + 10-15 min = ton temps semi projete. Communique le resultat pour affiner l'objectif !"},
+   tempo:{label:"Tempo 42 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure seuil 5'00-5'10\"/km",d:"42 min"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"14-15 km",conseil:"Ton seuil tend vers 5'05\"/km. L'objectif 1h45-1h52 devient tres concret."}},
+  // SEM 12
+  {hiit:{label:"Pyramide Vitesse",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"💨",t:"200m rapide — 4'15\"/km",d:"~50 sec"},{i:"🏃",t:"Recup 200m",d:"1 min"},{i:"💨",t:"400m — 4'30\"/km",d:"~2 min"},{i:"🏃",t:"Recup 400m",d:"2 min"},{i:"💨",t:"800m — 4'45\"/km",d:"~4 min"},{i:"🏃",t:"Recup 400m",d:"2 min"},{i:"💨",t:"400m — 4'30\"/km",d:"~2 min"},{i:"💨",t:"200m — 4'15\"/km",d:"~50 sec"},{i:"🧘",t:"Retour calme",d:"8 min"}],dist:"~14 km",conseil:"Pyramide complete — la seance phare du programme. Chaque distance travaille une composante differente de ta physiologie."},
+   endurance:{label:"Sortie 80 min",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course 5'50-6'10\"/km",d:"80 min"},{i:"🧘",t:"Etirements 15 min",d:"15 min"}],dist:"14-15 km",conseil:"80 min de course ! Tu es a moins de 10 km du semi. Mentalement tu dois te sentir capable."},
+   tempo:{label:"Tempo 45 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure seuil 5'00-5'10\"/km",d:"45 min"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"14-15 km",conseil:"45 min de seuil a 5'05\"/km = coureur de niveau semi-marathon confirme."}},
+  // SEM 13
+  {hiit:{label:"Intervalles 1 km x6",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"💨",t:"1 km a allure semi cible — 5'00-5'10\"/km",d:"~5 min"},{i:"🏃",t:"Trot recup",d:"2 min"},{i:"🔁",t:"Repeter",d:"x6"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"~16 km",conseil:"6 x 1 km a allure course = tu apprends a gerer l'effort sur la duree. Essentiel pour ne pas exploser au km 15."},
+   endurance:{label:"Sortie 85 min",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course 5'45-6'05\"/km",d:"85 min"},{i:"🧘",t:"Etirements 15 min",d:"15 min"}],dist:"15-16 km",conseil:"Tu es a 5 km du semi ! La fin n'est qu'une question de resistance mentale maintenant."},
+   tempo:{label:"Tempo Race Pace — 48 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure exacte semi cible — 5'00-5'10\"/km",d:"48 min"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"15-16 km",conseil:"Cours exactement a l'allure que tu veux tenir le jour J. Memorise cette sensation — c'est elle qui te guidera a Marcq."}},
+  // SEM 14
+  {hiit:{label:"Fractionné Long 2 km",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"💨",t:"2 km a allure semi cible 5'00-5'10\"/km",d:"~10 min"},{i:"🏃",t:"Trot recup 1 km",d:"6 min"},{i:"🔁",t:"Repeter",d:"x3"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"~15 km",conseil:"3 x 2 km a allure cible = tu simules le semi par blocs. La tete apprend a gerer."},
+   endurance:{label:"Sortie 90 min",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course 5'45-6'05\"/km",d:"90 min"},{i:"🧘",t:"Etirements 15 min",d:"15 min"}],dist:"16-17 km",conseil:"90 min = la duree cible pour ton semi ! Tu confirmes que le corps peut tenir."},
+   tempo:{label:"Tempo 50 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure seuil 5'00-5'10\"/km",d:"50 min"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"16-17 km",conseil:"50 min de tempo — une seance d'exception. Peu de coureurs atteignent ce niveau."}},
+  // SEM 15
+  {hiit:{label:"Intervalles 1 km x7",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"💨",t:"1 km a 4'55-5'05\"/km",d:"~5 min"},{i:"🏃",t:"Trot recup",d:"2 min"},{i:"🔁",t:"Repeter",d:"x7"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"~16 km",conseil:"7 repetitions — ton plus gros volume de fractionnee du programme. Tu es au pic."},
+   endurance:{label:"Sortie 95 min",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course 5'45-6'00\"/km",d:"95 min"},{i:"🧘",t:"Etirements 15 min",d:"15 min"}],dist:"17-18 km",conseil:"17-18 km ! Il ne manque que 3 km. La condition physique est au sommet."},
+   tempo:{label:"Tempo Race Pace 52 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure exacte du semi — 5'00-5'10\"/km",d:"52 min"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"17-18 km",conseil:"Commence a visualiser chaque km du parcours de Marcq. La course se gagne dans la tete."}},
+  // SEM 16 — RECUPERATION
+  {hiit:{label:"HIIT Leger — Recuperation",steps:[{i:"🚶",t:"Marche",d:"5 min"},{i:"💨",t:"Sprint 70% — 5'00\"/km",d:"20 sec"},{i:"🚶",t:"Marche recup",d:"2 min"},{i:"🔁",t:"Repeter",d:"x5"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"~5 km",conseil:"Recuperation strategique. Volume -30%. Le corps consolide 15 semaines de travail."},
+   endurance:{label:"Sortie Recuperation 50 min",steps:[{i:"🚶",t:"Marche 5 min",d:"5 min"},{i:"🏃",t:"Trot lent 6'20-6'40\"/km",d:"50 min"},{i:"🧘",t:"Etirements longs 15 min",d:"15 min"}],dist:"8-9 km",conseil:"Garde les jambes fraiches pour la phase finale. Le pic de forme arrive dans 3 semaines."},
+   tempo:{label:"Footing Recup",steps:[{i:"🚶",t:"Marche 5 min",d:"5 min"},{i:"🏃",t:"Footing confort 6'10\"/km",d:"30 min"},{i:"🧘",t:"Etirements",d:"12 min"}],dist:"6-7 km",conseil:"Pas de tempo cette semaine. Recupere et visualise Marcq-en-Baroeul."}},
+  // SEM 17 — PHASE PIC
+  {hiit:{label:"Intervalles 1 km x6 — Allure Race",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"💨",t:"1 km exactement a 5'00\"/km — allure course",d:"5 min"},{i:"🏃",t:"Trot recup",d:"2 min"},{i:"🔁",t:"Repeter",d:"x6"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"~16 km",conseil:"Phase de pic ! Chaque 1 km a exactement 5'00\"/km. La regularite compte plus que la vitesse."},
+   endurance:{label:"Sortie 100 min — Quasi Semi",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course 5'40-5'55\"/km — proche allure semi",d:"100 min"},{i:"🧘",t:"Etirements 20 min",d:"20 min"}],dist:"18-19 km",conseil:"100 min = tu couvres 18-19 km. C'est physiquement le semi. La seance la plus importante du programme."},
+   tempo:{label:"Tempo Race Pace 55 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure exacte semi 5'00-5'10\"/km",d:"55 min"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"18-19 km",conseil:"Tu es au sommet de ta forme. Cette sensation de force — souviens-t'en le jour J."}},
+  // SEM 18
+  {hiit:{label:"Fartlek Intense",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Trot base 6'10\"/km",d:"5 min"},{i:"💨",t:"Acceleration 90% — 4'30\"/km",d:"2 min"},{i:"🏃",t:"Recup trot",d:"2 min"},{i:"🔁",t:"Repeter",d:"x6"},{i:"🧘",t:"Retour calme",d:"8 min"}],dist:"~16 km",conseil:"Derniere vraie seance intense. Tu maintiens le pic de forme."},
+   endurance:{label:"Simulation Semi 19 km",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"19 km a allure semi cible 5'00-5'15\"/km",d:"95-100 min"},{i:"🧘",t:"Etirements 20 min",d:"20 min"}],dist:"19 km",conseil:"SEANCE CLE : 19 km a allure cible. Ravitaille-toi toutes les 30 min comme en course. Ton temps sur ces 19 km te donnera une estimation precise du semi."},
+   tempo:{label:"Tempo 52 min",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure seuil 5'00-5'10\"/km",d:"52 min"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"17-18 km",conseil:"Derniere longue session de tempo. Conserve l'energie pour la course."}},
+  // SEM 19 — AFFUTAGE
+  {hiit:{label:"Fractionne Leger — Affutage",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"💨",t:"400m a 4'30-4'45\"/km",d:"~2 min"},{i:"🏃",t:"Recup 400m trot",d:"2 min"},{i:"🔁",t:"Repeter",d:"x6"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"~10 km",conseil:"Affutage commence. Volume -20%, intensite maintenue. Les jambes doivent se sentir legeres."},
+   endurance:{label:"Sortie 65 min — Affutage",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course 5'50-6'10\"/km",d:"65 min"},{i:"🧘",t:"Etirements 15 min",d:"15 min"}],dist:"11-12 km",conseil:"Volume reduit. Les reserves se remplissent. Tu vas vite avec moins d'effort — c'est l'affutage !"},
+   tempo:{label:"Tempo 35 min — Affutage",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Allure race pace 5'00-5'10\"/km",d:"35 min"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"10-11 km",conseil:"Ressens ta forme. Tu vas vite et facilement. Garde cette energie pour Marcq."}},
+  // SEM 20 — AFFUTAGE
+  {hiit:{label:"Fractionne Court — Vivacite",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"💨",t:"200m tres rapide — 4'10-4'20\"/km",d:"~50 sec"},{i:"🏃",t:"Recup 200m",d:"90 sec"},{i:"🔁",t:"Repeter",d:"x8"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"~8 km",conseil:"Courts et explosifs. Tu maintiens la vivacite musculaire. Les jambes restent fraiches."},
+   endurance:{label:"Sortie 50 min — Affutage",steps:[{i:"🚶",t:"Marche 3 min",d:"3 min"},{i:"🏃",t:"Course lente 6'00-6'20\"/km",d:"50 min"},{i:"🧘",t:"Etirements 15 min",d:"15 min"}],dist:"8-9 km",conseil:"Derniere sortie longue. Les jambes doivent se sentir comme des ressorts. Si tu te sens bien, c'est bon signe."},
+   tempo:{label:"Tempo Court — Race Pace",steps:[{i:"🚶",t:"Echauffement 10 min",d:"10 min"},{i:"🏃",t:"Race pace 5'00\"/km",d:"22 min"},{i:"🧘",t:"Retour calme",d:"10 min"}],dist:"7-8 km",conseil:"Visualise chaque km de Marcq-en-Baroeul. J-10 : tu es pret."}},
+  // SEM 21 — SEMAINE DE COURSE
+  {hiit:{label:"Activation Pré-Course J-5",steps:[{i:"🚶",t:"Marche 5 min",d:"5 min"},{i:"🏃",t:"Trot leger 6'30\"/km",d:"15 min"},{i:"💨",t:"4 accelerations de 20 sec a 4'40\"/km",d:"~2 min"},{i:"🧘",t:"Etirements doux 10 min",d:"10 min"}],dist:"~4 km",conseil:"DERNIERE seance. Legere activation seulement. Les Kipride sont rodees. Tu es pret."},
+   endurance:{label:"Footing Tranquille J-4",steps:[{i:"🚶",t:"Marche 5 min",d:"5 min"},{i:"🏃",t:"Trot tres lent 6'45\"/km",d:"20 min"},{i:"🧘",t:"Etirements doux",d:"15 min"}],dist:"~3 km",conseil:"Dernier footing. Tes jambes sont chargees et pretes. Profite du calme avant la tempete."},
+   tempo:{label:"Repos et Preparation J-3 a J-1",steps:[{i:"😴",t:"Repos complet ou marche legere 20 min",d:"J-3"},{i:"💧",t:"Hyperhydratation — 3,5L eau + elettrolytes",d:"J-2 et J-1"},{i:"🍚",t:"Repas riche en glucides : riz, patate douce, pain — la veille au soir",d:"J-1 soir"},{i:"🎽",t:"Prepare dossard, Kipride, tenue, gel/ravitaillement la veille",d:"J-1"},{i:"😴",t:"Coucher 21h max — levee 2h avant le depart",d:"J-1"}],dist:"Repos",conseil:"J-1 soir : repas riche en glucides (riz ou patate douce + poulet), PAS d'alcool, PAS d'aliments nouveaux. 8-9h de sommeil."}},
+  // SEM 22 — COURSE + RECUPERATION
+  {hiit:{label:"JOUR DE COURSE — Semi-Marathon Marcq !",steps:[{i:"⏰",t:"Reveil 2h avant le depart",d:"—"},{i:"🍌",t:"Petit-dej : banane + pain de mie + café — RIEN DE NOUVEAU",d:"—"},{i:"🏃",t:"Echauffement leger 10 min avant le depart",d:"10 min"},{i:"🎯",t:"KM 1-5 : bride-toi a 5'15-5'20\"/km — resist a la foule et l'adrenalie",d:"—"},{i:"📈",t:"KM 6-15 : allure cible 5'00-5'10\"/km — ton rythme de croisiere",d:"—"},{i:"🔥",t:"KM 16-21 : donne tout — si tu t'es gere tu as encore de la reserve",d:"—"},{i:"💧",t:"Ravitaillement a CHAQUE stand — ne saute aucun point",d:"—"},{i:"🏁",t:"Arrivee a Marcq-en-Baroeul — TU AS REUSSI ! Objectif : 1h45-1h52",d:"21,1 km"}],dist:"21,1 km",conseil:"STRATEGIE GAGNANTE : Les 5 premiers km sont les plus importants. Partir a 5'20\"/km quand tu te sens capable de 4'40\" demande une discipline extreme — mais c'est ce qui fait la difference entre terminer fort et s'effondrer au km 15. Tu l'as vecu le vendredi precedent. Cette fois tu maitrises."},
+   endurance:{label:"Recuperation Active J+2 a J+4",steps:[{i:"🧘",t:"Marche legere 20-30 min",d:"30 min"},{i:"🧊",t:"Bain froid des jambes si possible",d:"10 min"},{i:"🥩",t:"Beaucoup de proteines pour reparer les muscles",d:"Tous repas"},{i:"💧",t:"Rehydratation intensive",d:"Toute la journee"}],dist:"Recuperation",conseil:"Apres un semi : 48-72h sans running. Les Kipride ont probablement absorbe 800+ km de chocs en 22 semaines — verifie leur etat et anticipe le prochain objectif."},
+   tempo:{label:"Premier Footing Post-Course J+7",steps:[{i:"🚶",t:"Marche 10 min",d:"10 min"},{i:"🏃",t:"Trot ultra-lent 6'45\"/km",d:"20 min"},{i:"🧘",t:"Etirements 15 min",d:"15 min"}],dist:"3-4 km",conseil:"Premiere reprise tres douce. Ecoute ton corps. Tu viens de parcourir 717 km historiques + 21,1 km de semi-marathon. Etape suivante : le marathon ?"}}
+];
+
+// ── Calcul semaine globale depuis le 20 avril 2026 ──
+function getWeekIndex(dateStr){
+  const start=new Date("2026-04-20");
+  const d=new Date(dateStr);
+  const diff=Math.floor((d-start)/(7*24*60*60*1000));
+  return Math.max(0,Math.min(diff,RUN_PLAN.length-1));
+}
+
+// ── Récupère la session running enrichie pour un jour donné ──
+function getRunSession(sType,dateStr){
+  const wIdx=getWeekIndex(dateStr);
+  const plan=RUN_PLAN[wIdx];
+  const base=SESSIONS[sType];
+  let sp;
+  if(sType==='run_hiit')       sp=plan.hiit;
+  else if(sType==='run_endurance') sp=plan.endurance;
+  else if(sType==='run_pyramid')   sp=plan.tempo;
+  else return base;
+  return {...base,
+    title:`Running — ${sp.label}`,
+    runType:sp.label.toUpperCase(),
+    runSteps:sp.steps,
+    runDist:sp.dist||null,
+    tip:sp.conseil
+  };
+}
+
+// ── REALISTIC HUMAN SVG ANIMATIONS ──
+const SVG_ANIM = {
+
+pushup:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs>
+  <style>
+    @keyframes pu_body{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+    @keyframes pu_arm{0%,100%{d:path('M 48,58 L 42,72')}50%{d:path('M 48,42 L 42,56')}}
+    .pu-all{animation:pu_body 1.5s ease-in-out infinite;transform-origin:80px 65px;}
+  </style>
+</defs>
+<!-- sol -->
+<rect x="0" y="88" width="160" height="4" rx="2" fill="#1e2a38"/>
+<!-- ombre -->
+<ellipse cx="80" cy="90" rx="55" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="pu-all">
+  <!-- short bordeaux -->
+  <rect x="78" y="58" width="22" height="14" rx="4" fill="#6b1d2e"/>
+  <!-- corps / torse musclé -->
+  <rect x="60" y="46" width="36" height="22" rx="6" fill="#5c3317"/>
+  <!-- muscles pectoraux -->
+  <ellipse cx="70" cy="52" rx="8" ry="5" fill="#6b3d1a" opacity="0.7"/>
+  <ellipse cx="86" cy="52" rx="8" ry="5" fill="#6b3d1a" opacity="0.7"/>
+  <!-- tête -->
+  <ellipse cx="110" cy="38" rx="12" ry="13" fill="#5c3317"/>
+  <!-- cheveux afro -->
+  <ellipse cx="110" cy="28" rx="13" ry="10" fill="#1a0a00"/>
+  <ellipse cx="100" cy="31" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="120" cy="31" rx="7" ry="8" fill="#1a0a00"/>
+  <!-- oreille -->
+  <ellipse cx="99" cy="39" rx="3" ry="4" fill="#4a2810"/>
+  <!-- yeux -->
+  <ellipse cx="106" cy="38" rx="2.5" ry="2" fill="#fff"/>
+  <ellipse cx="106" cy="38" rx="1.5" ry="1.5" fill="#1a0a00"/>
+  <!-- barbe -->
+  <ellipse cx="110" cy="49" rx="8" ry="4" fill="#2a1005" opacity="0.8"/>
+  <!-- cou -->
+  <rect x="105" y="48" width="10" height="8" rx="3" fill="#5c3317"/>
+  <!-- bras gauche (appui) -->
+  <rect x="36" y="60" width="10" height="22" rx="5" fill="#5c3317" transform="rotate(-8,41,71)"/>
+  <!-- bras droit (appui) -->
+  <rect x="110" y="60" width="10" height="22" rx="5" fill="#5c3317" transform="rotate(8,115,71)"/>
+  <!-- mains -->
+  <ellipse cx="38" cy="83" rx="6" ry="4" fill="#4a2810"/>
+  <ellipse cx="118" cy="83" rx="6" ry="4" fill="#4a2810"/>
+  <!-- jambe gauche -->
+  <rect x="58" y="70" width="12" height="22" rx="5" fill="#6b1d2e"/>
+  <!-- jambe droite -->
+  <rect x="78" y="70" width="12" height="22" rx="5" fill="#6b1d2e"/>
+  <!-- pieds -->
+  <ellipse cx="34" cy="87" rx="9" ry="5" fill="#1a0a00"/>
+  <ellipse cx="118" cy="87" rx="9" ry="5" fill="#1a0a00"/>
+</g>
+<text x="80" y="105" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Pompes Classiques</text>
+</svg>`,
+
+diamond_pushup:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes dp_body{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+  .dp-all{animation:dp_body 1.5s ease-in-out infinite;transform-origin:80px 65px;}
+</style></defs>
+<rect x="0" y="88" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="90" rx="55" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="dp-all">
+  <rect x="78" y="58" width="22" height="14" rx="4" fill="#6b1d2e"/>
+  <rect x="60" y="46" width="36" height="22" rx="6" fill="#5c3317"/>
+  <ellipse cx="110" cy="38" rx="12" ry="13" fill="#5c3317"/>
+  <ellipse cx="110" cy="28" rx="13" ry="10" fill="#1a0a00"/>
+  <ellipse cx="100" cy="31" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="120" cy="31" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="99" cy="39" rx="3" ry="4" fill="#4a2810"/>
+  <ellipse cx="106" cy="38" rx="2.5" ry="2" fill="#fff"/>
+  <ellipse cx="106" cy="38" rx="1.5" ry="1.5" fill="#1a0a00"/>
+  <ellipse cx="110" cy="49" rx="8" ry="4" fill="#2a1005" opacity="0.8"/>
+  <rect x="105" y="48" width="10" height="8" rx="3" fill="#5c3317"/>
+  <!-- bras rapprochés triangle -->
+  <rect x="68" y="60" width="9" height="24" rx="4" fill="#5c3317" transform="rotate(12,72,72)"/>
+  <rect x="83" y="60" width="9" height="24" rx="4" fill="#5c3317" transform="rotate(-12,87,72)"/>
+  <!-- mains jointes en triangle -->
+  <polygon points="72,84 88,84 80,78" fill="#4a2810"/>
+  <rect x="58" y="70" width="12" height="20" rx="5" fill="#6b1d2e"/>
+  <rect x="78" y="70" width="12" height="20" rx="5" fill="#6b1d2e"/>
+  <ellipse cx="50" cy="87" rx="9" ry="5" fill="#1a0a00"/>
+  <ellipse cx="108" cy="87" rx="9" ry="5" fill="#1a0a00"/>
+</g>
+<text x="80" y="105" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Pompes Diamant</text>
+</svg>`,
+
+decline_pushup:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes dec_b{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  .dec-all{animation:dec_b 1.5s ease-in-out infinite;transform-origin:70px 60px;}
+</style></defs>
+<rect x="0" y="88" width="160" height="4" rx="2" fill="#1e2a38"/>
+<!-- canapé/lit -->
+<rect x="100" y="68" width="50" height="20" rx="6" fill="#2d3748"/>
+<rect x="105" y="62" width="40" height="12" rx="4" fill="#374151"/>
+<ellipse cx="80" cy="90" rx="55" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="dec-all">
+  <!-- corps incliné - tête en bas -->
+  <rect x="78" y="52" width="20" height="13" rx="4" fill="#6b1d2e" transform="rotate(-12,88,58)"/>
+  <rect x="52" y="40" width="35" height="22" rx="6" fill="#5c3317" transform="rotate(-12,69,51)"/>
+  <!-- tête en bas -->
+  <ellipse cx="30" cy="36" rx="12" ry="13" fill="#5c3317"/>
+  <ellipse cx="30" cy="26" rx="13" ry="10" fill="#1a0a00"/>
+  <ellipse cx="20" cy="29" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="40" cy="29" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="37" cy="36" rx="3" ry="4" fill="#4a2810"/>
+  <ellipse cx="34" cy="36" rx="2" ry="2" fill="#fff"/>
+  <ellipse cx="34" cy="36" rx="1.2" ry="1.2" fill="#1a0a00"/>
+  <ellipse cx="30" cy="46" rx="8" ry="4" fill="#2a1005" opacity="0.8"/>
+  <rect x="25" y="45" width="10" height="7" rx="3" fill="#5c3317"/>
+  <!-- bras -->
+  <rect x="36" y="56" width="10" height="22" rx="5" fill="#5c3317" transform="rotate(-5,41,67)"/>
+  <rect x="60" y="56" width="10" height="22" rx="5" fill="#5c3317" transform="rotate(5,65,67)"/>
+  <ellipse cx="37" cy="80" rx="6" ry="4" fill="#4a2810"/>
+  <ellipse cx="65" cy="80" rx="6" ry="4" fill="#4a2810"/>
+  <!-- jambes sur canapé -->
+  <rect x="92" y="54" width="13" height="18" rx="5" fill="#6b1d2e" transform="rotate(-12,98,63)"/>
+  <rect x="108" y="54" width="13" height="18" rx="5" fill="#6b1d2e" transform="rotate(-12,114,63)"/>
+</g>
+<text x="80" y="105" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Pompes Déclinées</text>
+</svg>`,
+
+archer_pushup:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes arch_b{0%,100%{transform:translateX(0)}45%{transform:translateX(-12px)}55%{transform:translateX(-12px)}}
+  .arch-all{animation:arch_b 2s ease-in-out infinite;transform-origin:80px 60px;}
+</style></defs>
+<rect x="0" y="88" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="90" rx="65" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="arch-all">
+  <rect x="72" y="56" width="22" height="14" rx="4" fill="#6b1d2e"/>
+  <rect x="54" y="44" width="36" height="22" rx="6" fill="#5c3317"/>
+  <ellipse cx="104" cy="36" rx="12" ry="13" fill="#5c3317"/>
+  <ellipse cx="104" cy="26" rx="13" ry="10" fill="#1a0a00"/>
+  <ellipse cx="94" cy="29" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="114" cy="29" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="93" cy="37" rx="3" ry="4" fill="#4a2810"/>
+  <ellipse cx="100" cy="36" rx="2" ry="2" fill="#fff"/>
+  <ellipse cx="100" cy="36" rx="1.2" ry="1.2" fill="#1a0a00"/>
+  <ellipse cx="104" cy="47" rx="8" ry="4" fill="#2a1005" opacity="0.8"/>
+  <rect x="99" y="46" width="10" height="7" rx="3" fill="#5c3317"/>
+  <!-- bras gauche très écarté tendu -->
+  <rect x="10" y="58" width="46" height="10" rx="5" fill="#5c3317"/>
+  <ellipse cx="12" cy="63" rx="7" ry="5" fill="#4a2810"/>
+  <!-- bras droit plié sous corps -->
+  <rect x="80" y="58" width="10" height="22" rx="5" fill="#5c3317" transform="rotate(5,85,69)"/>
+  <ellipse cx="84" cy="82" rx="6" ry="4" fill="#4a2810"/>
+  <!-- jambes -->
+  <rect x="50" y="68" width="13" height="22" rx="5" fill="#6b1d2e"/>
+  <rect x="68" y="68" width="13" height="22" rx="5" fill="#6b1d2e"/>
+  <ellipse cx="28" cy="87" rx="9" ry="5" fill="#1a0a00"/>
+  <ellipse cx="110" cy="87" rx="9" ry="5" fill="#1a0a00"/>
+</g>
+<text x="80" y="105" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Pompes Archer</text>
+</svg>`,
+
+pike_pushup:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes pk_b{0%,100%{transform:translateY(0)}50%{transform:translateY(12px)}}
+  .pk-all{animation:pk_b 1.6s ease-in-out infinite;transform-origin:80px 55px;}
+</style></defs>
+<rect x="0" y="95" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="97" rx="60" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="pk-all">
+  <!-- corps en V inversé -->
+  <!-- hanches en haut -->
+  <rect x="70" y="32" width="20" height="14" rx="4" fill="#6b1d2e"/>
+  <!-- torse vers le bas gauche -->
+  <rect x="38" y="48" width="36" height="18" rx="6" fill="#5c3317" transform="rotate(40,56,57)"/>
+  <!-- jambes vers le bas droite -->
+  <rect x="90" y="48" width="14" height="40" rx="6" fill="#6b1d2e" transform="rotate(-30,97,68)"/>
+  <rect x="104" y="48" width="14" height="40" rx="6" fill="#6b1d2e" transform="rotate(-30,111,68)"/>
+  <!-- tête en bas -->
+  <ellipse cx="22" cy="76" rx="12" ry="13" fill="#5c3317"/>
+  <ellipse cx="22" cy="66" rx="13" ry="10" fill="#1a0a00"/>
+  <ellipse cx="12" cy="69" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="32" cy="69" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="29" cy="76" rx="3" ry="4" fill="#4a2810"/>
+  <ellipse cx="26" cy="76" rx="2" ry="2" fill="#fff"/>
+  <ellipse cx="26" cy="76" rx="1.2" ry="1.2" fill="#1a0a00"/>
+  <ellipse cx="22" cy="86" rx="7" ry="3" fill="#2a1005" opacity="0.8"/>
+  <!-- bras -->
+  <rect x="30" y="80" width="10" height="16" rx="5" fill="#5c3317"/>
+  <rect x="46" y="80" width="10" height="16" rx="5" fill="#5c3317"/>
+  <ellipse cx="30" cy="96" rx="7" ry="4" fill="#4a2810"/>
+  <ellipse cx="50" cy="96" rx="7" ry="4" fill="#4a2810"/>
+  <!-- pieds en haut -->
+  <ellipse cx="122" cy="80" rx="9" ry="5" fill="#1a0a00"/>
+  <ellipse cx="136" cy="80" rx="9" ry="5" fill="#1a0a00"/>
+</g>
+<text x="80" y="108" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Pike Push-Up</text>
+</svg>`,
+
+explosive_pushup:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes expu{0%{transform:translateY(0)}25%{transform:translateY(-22px)}65%{transform:translateY(-22px)}100%{transform:translateY(0)}}
+  @keyframes spark{0%,60%{opacity:0}70%,90%{opacity:1}100%{opacity:0}}
+  .exp-all{animation:expu 1.3s ease-in-out infinite;transform-origin:80px 65px;}
+  .spark{animation:spark 1.3s ease-in-out infinite;}
+</style></defs>
+<rect x="0" y="88" width="160" height="4" rx="2" fill="#1e2a38"/>
+<!-- étincelles -->
+<g class="spark">
+  <line x1="42" y1="88" x2="36" y2="98" stroke="#f0a500" stroke-width="2" stroke-linecap="round"/>
+  <line x1="80" y1="88" x2="80" y2="100" stroke="#f0a500" stroke-width="2" stroke-linecap="round"/>
+  <line x1="118" y1="88" x2="124" y2="98" stroke="#f0a500" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="42" cy="88" r="3" fill="#ff6b35"/>
+  <circle cx="80" cy="88" r="3" fill="#ff6b35"/>
+  <circle cx="118" cy="88" r="3" fill="#ff6b35"/>
+</g>
+<ellipse cx="80" cy="90" rx="55" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="exp-all">
+  <rect x="75" y="56" width="22" height="14" rx="4" fill="#6b1d2e"/>
+  <rect x="57" y="44" width="36" height="22" rx="6" fill="#5c3317"/>
+  <ellipse cx="107" cy="36" rx="12" ry="13" fill="#5c3317"/>
+  <ellipse cx="107" cy="26" rx="13" ry="10" fill="#1a0a00"/>
+  <ellipse cx="97" cy="29" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="117" cy="29" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="96" cy="37" rx="3" ry="4" fill="#4a2810"/>
+  <ellipse cx="103" cy="36" rx="2" ry="2" fill="#fff"/>
+  <ellipse cx="103" cy="36" rx="1.2" ry="1.2" fill="#1a0a00"/>
+  <ellipse cx="107" cy="47" rx="8" ry="4" fill="#2a1005" opacity="0.8"/>
+  <rect x="102" y="46" width="10" height="7" rx="3" fill="#5c3317"/>
+  <!-- mains décollées du sol -->
+  <rect x="32" y="62" width="10" height="18" rx="5" fill="#5c3317"/>
+  <rect x="112" y="62" width="10" height="18" rx="5" fill="#5c3317"/>
+  <ellipse cx="35" cy="78" rx="7" ry="5" fill="#4a2810"/>
+  <ellipse cx="118" cy="78" rx="7" ry="5" fill="#4a2810"/>
+  <rect x="57" y="68" width="13" height="22" rx="5" fill="#6b1d2e"/>
+  <rect x="74" y="68" width="13" height="22" rx="5" fill="#6b1d2e"/>
+  <ellipse cx="22" cy="87" rx="9" ry="5" fill="#1a0a00"/>
+  <ellipse cx="130" cy="87" rx="9" ry="5" fill="#1a0a00"/>
+</g>
+<text x="80" y="105" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Pompes Explosives</text>
+</svg>`,
+
+superman:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes sm_up{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .sm-all{animation:sm_up 1.8s ease-in-out infinite;transform-origin:80px 62px;}
+</style></defs>
+<rect x="0" y="78" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="80" rx="60" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="sm-all">
+  <!-- corps allongé ventre sol -->
+  <rect x="38" y="60" width="84" height="18" rx="8" fill="#5c3317"/>
+  <!-- short -->
+  <rect x="38" y="60" width="30" height="18" rx="6" fill="#6b1d2e"/>
+  <!-- tête levée -->
+  <ellipse cx="134" cy="55" rx="12" ry="13" fill="#5c3317"/>
+  <ellipse cx="134" cy="45" rx="13" ry="10" fill="#1a0a00"/>
+  <ellipse cx="124" cy="48" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="144" cy="48" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="123" cy="56" rx="3" ry="4" fill="#4a2810"/>
+  <ellipse cx="130" cy="55" rx="2" ry="2" fill="#fff"/>
+  <ellipse cx="130" cy="55" rx="1.2" ry="1.2" fill="#1a0a00"/>
+  <ellipse cx="134" cy="65" rx="7" ry="3" fill="#2a1005" opacity="0.8"/>
+  <rect x="129" y="64" width="10" height="6" rx="3" fill="#5c3317"/>
+  <!-- bras levés devant -->
+  <rect x="142" y="46" width="14" height="10" rx="5" fill="#5c3317" transform="rotate(-25,149,51)"/>
+  <rect x="130" y="42" width="14" height="10" rx="5" fill="#5c3317" transform="rotate(-15,137,47)"/>
+  <ellipse cx="154" cy="44" rx="6" ry="4" fill="#4a2810"/>
+  <!-- jambes levées derrière -->
+  <rect x="12" y="52" width="14" height="10" rx="5" fill="#6b1d2e" transform="rotate(20,19,57)"/>
+  <rect x="24" y="52" width="14" height="10" rx="5" fill="#6b1d2e" transform="rotate(15,31,57)"/>
+  <ellipse cx="8" cy="58" rx="7" ry="4" fill="#1a0a00"/>
+</g>
+<text x="80" y="96" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Superman</text>
+</svg>`,
+
+superman_uni:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes smu{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-10px) rotate(2deg)}}
+  .smu-all{animation:smu 2s ease-in-out infinite;transform-origin:80px 62px;}
+</style></defs>
+<rect x="0" y="78" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="80" rx="60" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="smu-all">
+  <rect x="38" y="60" width="84" height="18" rx="8" fill="#5c3317"/>
+  <rect x="38" y="60" width="30" height="18" rx="6" fill="#6b1d2e"/>
+  <ellipse cx="134" cy="55" rx="12" ry="13" fill="#5c3317"/>
+  <ellipse cx="134" cy="45" rx="13" ry="10" fill="#1a0a00"/>
+  <ellipse cx="124" cy="48" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="144" cy="48" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="123" cy="56" rx="3" ry="4" fill="#4a2810"/>
+  <ellipse cx="130" cy="55" rx="2" ry="2" fill="#fff"/>
+  <ellipse cx="130" cy="55" rx="1.2" ry="1.2" fill="#1a0a00"/>
+  <ellipse cx="134" cy="65" rx="7" ry="3" fill="#2a1005" opacity="0.8"/>
+  <rect x="129" y="64" width="10" height="6" rx="3" fill="#5c3317"/>
+  <!-- 1 seul bras levé -->
+  <rect x="140" y="44" width="16" height="10" rx="5" fill="#5c3317" transform="rotate(-20,148,49)"/>
+  <ellipse cx="154" cy="42" rx="6" ry="4" fill="#4a2810"/>
+  <!-- autre bras au sol -->
+  <rect x="118" y="68" width="16" height="10" rx="5" fill="#5c3317"/>
+  <ellipse cx="132" cy="74" rx="6" ry="4" fill="#4a2810"/>
+  <!-- 1 jambe levée -->
+  <rect x="12" y="52" width="14" height="10" rx="5" fill="#6b1d2e" transform="rotate(18,19,57)"/>
+  <ellipse cx="9" cy="58" rx="7" ry="4" fill="#1a0a00"/>
+  <!-- autre jambe sol -->
+  <rect x="26" y="68" width="14" height="10" rx="5" fill="#6b1d2e"/>
+  <ellipse cx="28" cy="76" rx="7" ry="4" fill="#1a0a00"/>
+</g>
+<text x="80" y="96" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Superman Unilatéral</text>
+</svg>`,
+
+snow_angel:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes sna_l{0%,100%{transform:rotate(0deg)}50%{transform:rotate(50deg)}}
+  @keyframes sna_r{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-50deg)}}
+  .sna-armL{animation:sna_l 1.8s ease-in-out infinite;transform-origin:64px 62px;}
+  .sna-armR{animation:sna_r 1.8s ease-in-out infinite;transform-origin:96px 62px;}
+</style></defs>
+<rect x="0" y="78" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="80" rx="60" ry="4" fill="rgba(0,0,0,0.25)"/>
+<!-- corps statique -->
+<rect x="60" y="58" width="40" height="20" rx="8" fill="#5c3317"/>
+<rect x="60" y="62" width="24" height="16" rx="6" fill="#6b1d2e"/>
+<ellipse cx="80" cy="50" rx="12" ry="13" fill="#5c3317"/>
+<ellipse cx="80" cy="40" rx="13" ry="10" fill="#1a0a00"/>
+<ellipse cx="70" cy="43" rx="7" ry="8" fill="#1a0a00"/>
+<ellipse cx="90" cy="43" rx="7" ry="8" fill="#1a0a00"/>
+<ellipse cx="69" cy="51" rx="3" ry="4" fill="#4a2810"/>
+<ellipse cx="76" cy="50" rx="2" ry="2" fill="#fff"/>
+<ellipse cx="76" cy="50" rx="1.2" ry="1.2" fill="#1a0a00"/>
+<ellipse cx="80" cy="60" rx="7" ry="3" fill="#2a1005" opacity="0.8"/>
+<rect x="75" y="59" width="10" height="6" rx="3" fill="#5c3317"/>
+<!-- jambes fixes -->
+<rect x="54" y="76" width="13" height="12" rx="5" fill="#6b1d2e"/>
+<rect x="73" y="76" width="13" height="12" rx="5" fill="#6b1d2e"/>
+<ellipse cx="50" cy="78" rx="9" ry="5" fill="#1a0a00"/>
+<ellipse cx="100" cy="78" rx="9" ry="5" fill="#1a0a00"/>
+<!-- bras animés en arc -->
+<g class="sna-armL">
+  <rect x="28" y="60" width="36" height="10" rx="5" fill="#5c3317"/>
+  <ellipse cx="22" cy="64" rx="7" ry="5" fill="#4a2810"/>
+</g>
+<g class="sna-armR">
+  <rect x="96" y="60" width="36" height="10" rx="5" fill="#5c3317"/>
+  <ellipse cx="138" cy="64" rx="7" ry="5" fill="#4a2810"/>
+</g>
+<text x="80" y="96" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Reverse Snow Angel</text>
+</svg>`,
+
+y_pushup:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes yp_b{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  .yp-all{animation:yp_b 1.5s ease-in-out infinite;transform-origin:80px 65px;}
+</style></defs>
+<rect x="0" y="88" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="90" rx="65" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="yp-all">
+  <rect x="73" y="56" width="22" height="14" rx="4" fill="#6b1d2e"/>
+  <rect x="55" y="44" width="36" height="22" rx="6" fill="#5c3317"/>
+  <ellipse cx="105" cy="36" rx="12" ry="13" fill="#5c3317"/>
+  <ellipse cx="105" cy="26" rx="13" ry="10" fill="#1a0a00"/>
+  <ellipse cx="95" cy="29" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="115" cy="29" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="94" cy="37" rx="3" ry="4" fill="#4a2810"/>
+  <ellipse cx="101" cy="36" rx="2" ry="2" fill="#fff"/>
+  <ellipse cx="101" cy="36" rx="1.2" ry="1.2" fill="#1a0a00"/>
+  <ellipse cx="105" cy="47" rx="8" ry="4" fill="#2a1005" opacity="0.8"/>
+  <rect x="100" y="46" width="10" height="7" rx="3" fill="#5c3317"/>
+  <!-- bras en Y très écartés -->
+  <rect x="8" y="60" width="50" height="10" rx="5" fill="#5c3317" transform="rotate(20,33,65)"/>
+  <ellipse cx="6" cy="72" rx="7" ry="5" fill="#4a2810"/>
+  <rect x="102" y="60" width="50" height="10" rx="5" fill="#5c3317" transform="rotate(-20,127,65)"/>
+  <ellipse cx="154" cy="72" rx="7" ry="5" fill="#4a2810"/>
+  <!-- jambes -->
+  <rect x="55" y="68" width="13" height="22" rx="5" fill="#6b1d2e"/>
+  <rect x="72" y="68" width="13" height="22" rx="5" fill="#6b1d2e"/>
+  <ellipse cx="30" cy="87" rx="9" ry="5" fill="#1a0a00"/>
+  <ellipse cx="120" cy="87" rx="9" ry="5" fill="#1a0a00"/>
+</g>
+<text x="80" y="105" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Pompes en Y</text>
+</svg>`,
+
+good_morning:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes gm_t{0%,100%{transform:rotate(0deg)}50%{transform:rotate(42deg)}}
+  .gm-torso{animation:gm_t 2.2s ease-in-out infinite;transform-origin:80px 62px;}
+</style></defs>
+<rect x="0" y="96" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="98" rx="40" ry="4" fill="rgba(0,0,0,0.25)"/>
+<!-- jambes statiques -->
+<rect x="64" y="62" width="14" height="36" rx="6" fill="#6b1d2e"/>
+<rect x="82" y="62" width="14" height="36" rx="6" fill="#6b1d2e"/>
+<ellipse cx="62" cy="96" rx="12" ry="5" fill="#1a0a00"/>
+<ellipse cx="98" cy="96" rx="12" ry="5" fill="#1a0a00"/>
+<!-- torse + tête animés -->
+<g class="gm-torso">
+  <!-- torse -->
+  <rect x="62" y="38" width="36" height="28" rx="8" fill="#5c3317"/>
+  <!-- short haut -->
+  <rect x="62" y="54" width="36" height="14" rx="5" fill="#6b1d2e"/>
+  <!-- muscles abdos -->
+  <rect x="72" y="44" width="6" height="8" rx="3" fill="#4a2810" opacity="0.5"/>
+  <rect x="82" y="44" width="6" height="8" rx="3" fill="#4a2810" opacity="0.5"/>
+  <!-- tête -->
+  <ellipse cx="80" cy="22" rx="13" ry="14" fill="#5c3317"/>
+  <ellipse cx="80" cy="11" rx="14" ry="11" fill="#1a0a00"/>
+  <ellipse cx="68" cy="14" rx="8" ry="9" fill="#1a0a00"/>
+  <ellipse cx="92" cy="14" rx="8" ry="9" fill="#1a0a00"/>
+  <ellipse cx="67" cy="23" rx="3.5" ry="4.5" fill="#4a2810"/>
+  <ellipse cx="75" cy="22" rx="2.5" ry="2" fill="#fff"/>
+  <ellipse cx="75" cy="22" rx="1.5" ry="1.5" fill="#1a0a00"/>
+  <ellipse cx="80" cy="33" rx="9" ry="4" fill="#2a1005" opacity="0.8"/>
+  <rect x="75" y="32" width="10" height="8" rx="3" fill="#5c3317"/>
+  <!-- bras derrière la tête -->
+  <rect x="50" y="28" width="14" height="10" rx="5" fill="#5c3317" transform="rotate(15,57,33)"/>
+  <rect x="96" y="28" width="14" height="10" rx="5" fill="#5c3317" transform="rotate(-15,103,33)"/>
+  <ellipse cx="48" cy="34" rx="6" ry="5" fill="#4a2810"/>
+  <ellipse cx="112" cy="34" rx="6" ry="5" fill="#4a2810"/>
+</g>
+<text x="80" y="108" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Good Morning</text>
+</svg>`,
+
+iso_curl:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes ic_arm{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-55deg)}}
+  .ic-arm{animation:ic_arm 1.8s ease-in-out infinite;transform-origin:80px 58px;}
+</style></defs>
+<rect x="0" y="100" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="102" rx="28" ry="4" fill="rgba(0,0,0,0.25)"/>
+<!-- corps debout -->
+<ellipse cx="80" cy="16" rx="13" ry="14" fill="#5c3317"/>
+<ellipse cx="80" cy="6" rx="14" ry="11" fill="#1a0a00"/>
+<ellipse cx="68" cy="9" rx="8" ry="9" fill="#1a0a00"/>
+<ellipse cx="92" cy="9" rx="8" ry="9" fill="#1a0a00"/>
+<ellipse cx="68" cy="17" rx="3.5" ry="4.5" fill="#4a2810"/>
+<ellipse cx="75" cy="16" rx="2.5" ry="2" fill="#fff"/>
+<ellipse cx="75" cy="16" rx="1.5" ry="1.5" fill="#1a0a00"/>
+<ellipse cx="80" cy="27" rx="9" ry="4" fill="#2a1005" opacity="0.8"/>
+<rect x="75" y="26" width="10" height="7" rx="3" fill="#5c3317"/>
+<!-- torse -->
+<rect x="62" y="30" width="36" height="34" rx="8" fill="#5c3317"/>
+<rect x="62" y="50" width="36" height="18" rx="5" fill="#6b1d2e"/>
+<!-- pecs -->
+<ellipse cx="72" cy="38" rx="7" ry="5" fill="#4a2810" opacity="0.5"/>
+<ellipse cx="88" cy="38" rx="7" ry="5" fill="#4a2810" opacity="0.5"/>
+<!-- jambes -->
+<rect x="64" y="66" width="14" height="36" rx="6" fill="#6b1d2e"/>
+<rect x="82" y="66" width="14" height="36" rx="6" fill="#6b1d2e"/>
+<ellipse cx="63" cy="100" rx="12" ry="5" fill="#1a0a00"/>
+<ellipse cx="97" cy="100" rx="12" ry="5" fill="#1a0a00"/>
+<!-- bras animé curl -->
+<g class="ic-arm">
+  <rect x="44" y="52" width="38" height="12" rx="6" fill="#5c3317"/>
+  <rect x="100" y="52" width="38" height="12" rx="6" fill="#5c3317" transform="scale(-1,1) translate(-260,0)"/>
+  <ellipse cx="38" cy="58" rx="8" ry="6" fill="#4a2810"/>
+  <ellipse cx="122" cy="58" rx="8" ry="6" fill="#4a2810"/>
+</g>
+<!-- flèche résistance -->
+<line x1="80" y1="42" x2="80" y2="52" stroke="#f0a500" stroke-width="2" stroke-dasharray="4,3" stroke-linecap="round"/>
+<polygon points="80,40 77,46 83,46" fill="#f0a500"/>
+<text x="80" y="108" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Curl Isométrique</text>
+</svg>`,
+
+squat:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes sq_b{0%,100%{transform:translateY(0) scaleY(1)}50%{transform:translateY(18px) scaleY(0.72)}}
+  .sq-all{animation:sq_b 2s ease-in-out infinite;transform-origin:80px 50px;}
+</style></defs>
+<rect x="0" y="100" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="102" rx="38" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="sq-all">
+  <!-- tête -->
+  <ellipse cx="80" cy="12" rx="13" ry="14" fill="#5c3317"/>
+  <ellipse cx="80" cy="2" rx="14" ry="11" fill="#1a0a00"/>
+  <ellipse cx="68" cy="5" rx="8" ry="9" fill="#1a0a00"/>
+  <ellipse cx="92" cy="5" rx="8" ry="9" fill="#1a0a00"/>
+  <ellipse cx="68" cy="13" rx="3.5" ry="4.5" fill="#4a2810"/>
+  <ellipse cx="75" cy="12" rx="2.5" ry="2" fill="#fff"/>
+  <ellipse cx="75" cy="12" rx="1.5" ry="1.5" fill="#1a0a00"/>
+  <ellipse cx="80" cy="23" rx="9" ry="4" fill="#2a1005" opacity="0.8"/>
+  <rect x="75" y="22" width="10" height="7" rx="3" fill="#5c3317"/>
+  <!-- torse musclé -->
+  <rect x="62" y="26" width="36" height="30" rx="8" fill="#5c3317"/>
+  <rect x="62" y="44" width="36" height="16" rx="5" fill="#6b1d2e"/>
+  <ellipse cx="72" cy="34" rx="7" ry="5" fill="#4a2810" opacity="0.5"/>
+  <ellipse cx="88" cy="34" rx="7" ry="5" fill="#4a2810" opacity="0.5"/>
+  <!-- bras tendus devant -->
+  <rect x="26" y="40" width="38" height="11" rx="5" fill="#5c3317"/>
+  <rect x="96" y="40" width="38" height="11" rx="5" fill="#5c3317"/>
+  <ellipse cx="20" cy="45" rx="8" ry="5" fill="#4a2810"/>
+  <ellipse cx="140" cy="45" rx="8" ry="5" fill="#4a2810"/>
+  <!-- jambes -->
+  <rect x="62" y="58" width="15" height="42" rx="7" fill="#6b1d2e"/>
+  <rect x="83" y="58" width="15" height="42" rx="7" fill="#6b1d2e"/>
+  <!-- genoux -->
+  <ellipse cx="69" cy="78" rx="9" ry="8" fill="#5a1828"/>
+  <ellipse cx="91" cy="78" rx="9" ry="8" fill="#5a1828"/>
+  <!-- pieds -->
+  <ellipse cx="62" cy="100" rx="14" ry="6" fill="#1a0a00"/>
+  <ellipse cx="98" cy="100" rx="14" ry="6" fill="#1a0a00"/>
+</g>
+<text x="80" y="108" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Squat Classique</text>
+</svg>`,
+
+lunge:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes lu_b{0%,100%{transform:translateX(0)}50%{transform:translateX(10px)}}
+  .lu-all{animation:lu_b 2s ease-in-out infinite;transform-origin:70px 50px;}
+</style></defs>
+<rect x="0" y="100" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="102" rx="48" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="lu-all">
+  <ellipse cx="68" cy="12" rx="13" ry="14" fill="#5c3317"/>
+  <ellipse cx="68" cy="2" rx="14" ry="11" fill="#1a0a00"/>
+  <ellipse cx="56" cy="5" rx="8" ry="9" fill="#1a0a00"/>
+  <ellipse cx="80" cy="5" rx="8" ry="9" fill="#1a0a00"/>
+  <ellipse cx="56" cy="13" rx="3.5" ry="4.5" fill="#4a2810"/>
+  <ellipse cx="63" cy="12" rx="2.5" ry="2" fill="#fff"/>
+  <ellipse cx="63" cy="12" rx="1.5" ry="1.5" fill="#1a0a00"/>
+  <ellipse cx="68" cy="23" rx="9" ry="4" fill="#2a1005" opacity="0.8"/>
+  <rect x="63" y="22" width="10" height="7" rx="3" fill="#5c3317"/>
+  <rect x="50" y="26" width="36" height="30" rx="8" fill="#5c3317"/>
+  <rect x="50" y="44" width="36" height="16" rx="5" fill="#6b1d2e"/>
+  <ellipse cx="60" cy="34" rx="7" ry="5" fill="#4a2810" opacity="0.5"/>
+  <ellipse cx="76" cy="34" rx="7" ry="5" fill="#4a2810" opacity="0.5"/>
+  <!-- bras -->
+  <rect x="28" y="36" width="26" height="10" rx="5" fill="#5c3317"/>
+  <rect x="80" y="36" width="26" height="10" rx="5" fill="#5c3317"/>
+  <ellipse cx="22" cy="40" rx="7" ry="5" fill="#4a2810"/>
+  <ellipse cx="112" cy="40" rx="7" ry="5" fill="#4a2810"/>
+  <!-- jambe avant fléchie -->
+  <rect x="72" y="58" width="15" height="28" rx="7" fill="#6b1d2e" transform="rotate(15,79,72)"/>
+  <ellipse cx="88" cy="96" rx="14" ry="6" fill="#1a0a00"/>
+  <!-- jambe arrière genou sol -->
+  <rect x="36" y="58" width="15" height="28" rx="7" fill="#6b1d2e" transform="rotate(-10,43,72)"/>
+  <ellipse cx="28" cy="96" rx="12" ry="5" fill="#1a0a00"/>
+  <!-- genou arrière -->
+  <ellipse cx="44" cy="86" rx="9" ry="8" fill="#5a1828"/>
+</g>
+<text x="80" y="108" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Fente Marchée</text>
+</svg>`,
+
+jump_squat:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes js_b{0%{transform:translateY(0) scaleY(0.7)}25%{transform:translateY(-24px) scaleY(1)}65%{transform:translateY(-24px) scaleY(1)}100%{transform:translateY(0) scaleY(0.7)}}
+  @keyframes js_sp{0%,60%{opacity:0}75%,90%{opacity:1}100%{opacity:0}}
+  .js-all{animation:js_b 1.3s ease-in-out infinite;transform-origin:80px 60px;}
+  .js-spark{animation:js_sp 1.3s ease-in-out infinite;}
+</style></defs>
+<rect x="0" y="100" width="160" height="4" rx="2" fill="#1e2a38"/>
+<g class="js-spark">
+  <line x1="60" y1="100" x2="52" y2="108" stroke="#f0a500" stroke-width="2" stroke-linecap="round"/>
+  <line x1="80" y1="100" x2="80" y2="110" stroke="#f0a500" stroke-width="2" stroke-linecap="round"/>
+  <line x1="100" y1="100" x2="108" y2="108" stroke="#f0a500" stroke-width="2" stroke-linecap="round"/>
+</g>
+<ellipse cx="80" cy="102" rx="38" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="js-all">
+  <ellipse cx="80" cy="10" rx="13" ry="14" fill="#5c3317"/>
+  <ellipse cx="80" cy="0" rx="14" ry="11" fill="#1a0a00"/>
+  <ellipse cx="68" cy="3" rx="8" ry="9" fill="#1a0a00"/>
+  <ellipse cx="92" cy="3" rx="8" ry="9" fill="#1a0a00"/>
+  <ellipse cx="68" cy="11" rx="3.5" ry="4.5" fill="#4a2810"/>
+  <ellipse cx="75" cy="10" rx="2.5" ry="2" fill="#fff"/>
+  <ellipse cx="75" cy="10" rx="1.5" ry="1.5" fill="#1a0a00"/>
+  <ellipse cx="80" cy="21" rx="9" ry="4" fill="#2a1005" opacity="0.8"/>
+  <rect x="75" y="20" width="10" height="7" rx="3" fill="#5c3317"/>
+  <rect x="62" y="24" width="36" height="30" rx="8" fill="#5c3317"/>
+  <rect x="62" y="42" width="36" height="16" rx="5" fill="#6b1d2e"/>
+  <ellipse cx="72" cy="32" rx="7" ry="5" fill="#4a2810" opacity="0.5"/>
+  <ellipse cx="88" cy="32" rx="7" ry="5" fill="#4a2810" opacity="0.5"/>
+  <!-- bras levés en saut -->
+  <rect x="28" y="18" width="36" height="11" rx="5" fill="#5c3317" transform="rotate(-30,46,23)"/>
+  <rect x="96" y="18" width="36" height="11" rx="5" fill="#5c3317" transform="rotate(30,114,23)"/>
+  <ellipse cx="20" cy="12" rx="8" ry="5" fill="#4a2810"/>
+  <ellipse cx="140" cy="12" rx="8" ry="5" fill="#4a2810"/>
+  <rect x="62" y="56" width="15" height="42" rx="7" fill="#6b1d2e"/>
+  <rect x="83" y="56" width="15" height="42" rx="7" fill="#6b1d2e"/>
+  <ellipse cx="69" cy="76" rx="9" ry="8" fill="#5a1828"/>
+  <ellipse cx="91" cy="76" rx="9" ry="8" fill="#5a1828"/>
+  <ellipse cx="62" cy="100" rx="14" ry="6" fill="#1a0a00"/>
+  <ellipse cx="98" cy="100" rx="14" ry="6" fill="#1a0a00"/>
+</g>
+<text x="80" y="108" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Squat Sauté</text>
+</svg>`,
+
+glute_bridge:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes gb_h{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+  .gb-hips{animation:gb_h 1.8s ease-in-out infinite;transform-origin:80px 62px;}
+</style></defs>
+<rect x="0" y="90" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="92" rx="65" ry="4" fill="rgba(0,0,0,0.25)"/>
+<!-- épaules/tête fixes sol -->
+<ellipse cx="130" cy="74" rx="13" ry="14" fill="#5c3317"/>
+<ellipse cx="130" cy="64" rx="14" ry="11" fill="#1a0a00"/>
+<ellipse cx="118" cy="67" rx="8" ry="9" fill="#1a0a00"/>
+<ellipse cx="142" cy="67" rx="8" ry="9" fill="#1a0a00"/>
+<ellipse cx="118" cy="75" rx="3.5" ry="4.5" fill="#4a2810"/>
+<ellipse cx="125" cy="74" rx="2.5" ry="2" fill="#fff"/>
+<ellipse cx="125" cy="74" rx="1.5" ry="1.5" fill="#1a0a00"/>
+<ellipse cx="130" cy="85" rx="8" ry="3.5" fill="#2a1005" opacity="0.8"/>
+<!-- épaules torse sol -->
+<rect x="108" y="76" width="36" height="16" rx="7" fill="#5c3317"/>
+<!-- bras au sol -->
+<rect x="120" y="86" width="12" height="6" rx="3" fill="#5c3317"/>
+<rect x="100" y="86" width="12" height="6" rx="3" fill="#5c3317"/>
+<ellipse cx="98" cy="90" rx="8" ry="5" fill="#4a2810"/>
+<ellipse cx="138" cy="90" rx="8" ry="5" fill="#4a2810"/>
+<!-- hanches + jambes animées -->
+<g class="gb-hips">
+  <!-- short -->
+  <rect x="70" y="62" width="42" height="18" rx="7" fill="#6b1d2e"/>
+  <!-- dos/fessiers -->
+  <rect x="72" y="68" width="38" height="10" rx="5" fill="#5c3317"/>
+  <!-- jambe gauche -->
+  <rect x="52" y="66" width="22" height="12" rx="5" fill="#6b1d2e" transform="rotate(-30,63,72)"/>
+  <rect x="34" y="78" width="22" height="14" rx="6" fill="#6b1d2e"/>
+  <ellipse cx="28" cy="90" rx="14" ry="6" fill="#1a0a00"/>
+  <!-- jambe droite -->
+  <rect x="86" y="66" width="22" height="12" rx="5" fill="#6b1d2e" transform="rotate(-30,97,72)"/>
+  <rect x="88" y="78" width="22" height="14" rx="6" fill="#6b1d2e"/>
+  <ellipse cx="102" cy="90" rx="14" ry="6" fill="#1a0a00"/>
+</g>
+<text x="80" y="105" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Glute Bridge</text>
+</svg>`,
+
+wall_sit:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes ws_p{0%,100%{opacity:1}50%{opacity:0.65}}
+  .ws-all{animation:ws_p 2.5s ease-in-out infinite;}
+</style></defs>
+<rect x="0" y="100" width="160" height="4" rx="2" fill="#1e2a38"/>
+<!-- mur -->
+<rect x="118" y="0" width="16" height="100" rx="0" fill="#1e2a38"/>
+<rect x="116" y="0" width="4" height="100" fill="#2d3748"/>
+<ellipse cx="80" cy="102" rx="38" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="ws-all">
+  <!-- tête -->
+  <ellipse cx="104" cy="16" rx="13" ry="14" fill="#5c3317"/>
+  <ellipse cx="104" cy="6" rx="14" ry="11" fill="#1a0a00"/>
+  <ellipse cx="92" cy="9" rx="8" ry="9" fill="#1a0a00"/>
+  <ellipse cx="116" cy="9" rx="8" ry="9" fill="#1a0a00"/>
+  <ellipse cx="92" cy="17" rx="3.5" ry="4.5" fill="#4a2810"/>
+  <ellipse cx="99" cy="16" rx="2.5" ry="2" fill="#fff"/>
+  <ellipse cx="99" cy="16" rx="1.5" ry="1.5" fill="#1a0a00"/>
+  <ellipse cx="104" cy="27" rx="9" ry="4" fill="#2a1005" opacity="0.8"/>
+  <rect x="99" y="26" width="10" height="7" rx="3" fill="#5c3317"/>
+  <!-- dos contre le mur -->
+  <rect x="86" y="30" width="32" height="40" rx="7" fill="#5c3317"/>
+  <rect x="86" y="52" width="32" height="22" rx="5" fill="#6b1d2e"/>
+  <!-- pecs -->
+  <ellipse cx="96" cy="40" rx="7" ry="5" fill="#4a2810" opacity="0.5"/>
+  <ellipse cx="110" cy="40" rx="7" ry="5" fill="#4a2810" opacity="0.5"/>
+  <!-- cuisses à 90° sol -->
+  <rect x="44" y="68" width="44" height="18" rx="8" fill="#6b1d2e"/>
+  <rect x="62" y="68" width="44" height="18" rx="8" fill="#6b1d2e"/>
+  <!-- jambes verticales -->
+  <rect x="44" y="84" width="16" height="18" rx="7" fill="#6b1d2e"/>
+  <rect x="72" y="84" width="16" height="18" rx="7" fill="#6b1d2e"/>
+  <!-- genoux -->
+  <ellipse cx="52" cy="84" rx="9" ry="8" fill="#5a1828"/>
+  <ellipse cx="80" cy="84" rx="9" ry="8" fill="#5a1828"/>
+  <!-- pieds -->
+  <ellipse cx="46" cy="100" rx="14" ry="6" fill="#1a0a00"/>
+  <ellipse cx="76" cy="100" rx="14" ry="6" fill="#1a0a00"/>
+  <!-- bras le long corps -->
+  <rect x="70" y="38" width="12" height="30" rx="6" fill="#5c3317"/>
+  <!-- indicateur 90° -->
+  <text x="55" y="80" fill="#f0a500" font-size="10" font-family="system-ui" font-weight="700">90°</text>
+</g>
+<text x="72" y="108" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Wall Sit</text>
+</svg>`,
+
+plank:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes pl_p{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+  .pl-all{animation:pl_p 3s ease-in-out infinite;transform-origin:80px 65px;}
+</style></defs>
+<rect x="0" y="88" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="90" rx="65" ry="4" fill="rgba(0,0,0,0.25)"/>
+<g class="pl-all">
+  <!-- ligne corps droit indicateur -->
+  <line x1="18" y1="60" x2="142" y2="60" stroke="#f0a500" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.4"/>
+  <!-- tête -->
+  <ellipse cx="136" cy="52" rx="12" ry="13" fill="#5c3317"/>
+  <ellipse cx="136" cy="42" rx="13" ry="10" fill="#1a0a00"/>
+  <ellipse cx="125" cy="45" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="146" cy="45" rx="7" ry="8" fill="#1a0a00"/>
+  <ellipse cx="124" cy="53" rx="3" ry="4" fill="#4a2810"/>
+  <ellipse cx="131" cy="52" rx="2.5" ry="2" fill="#fff"/>
+  <ellipse cx="131" cy="52" rx="1.5" ry="1.5" fill="#1a0a00"/>
+  <ellipse cx="136" cy="62" rx="8" ry="3.5" fill="#2a1005" opacity="0.8"/>
+  <rect x="131" y="61" width="10" height="7" rx="3" fill="#5c3317"/>
+  <!-- torse -->
+  <rect x="72" y="52" width="62" height="18" rx="7" fill="#5c3317"/>
+  <rect x="72" y="60" width="36" height="12" rx="5" fill="#6b1d2e"/>
+  <!-- abdos -->
+  <rect x="84" y="56" width="7" height="10" rx="3" fill="#4a2810" opacity="0.45"/>
+  <rect x="96" y="56" width="7" height="10" rx="3" fill="#4a2810" opacity="0.45"/>
+  <!-- appuis coudes -->
+  <rect x="54" y="64" width="20" height="12" rx="5" fill="#5c3317"/>
+  <rect x="88" y="64" width="20" height="12" rx="5" fill="#5c3317"/>
+  <ellipse cx="50" cy="78" rx="10" ry="7" fill="#4a2810"/>
+  <ellipse cx="96" cy="78" rx="10" ry="7" fill="#4a2810"/>
+  <!-- jambes -->
+  <rect x="16" y="56" width="58" height="14" rx="6" fill="#6b1d2e"/>
+  <!-- pieds -->
+  <ellipse cx="14" cy="74" rx="10" ry="7" fill="#1a0a00"/>
+  <ellipse cx="28" cy="74" rx="10" ry="7" fill="#1a0a00"/>
+</g>
+<text x="80" y="104" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Planche Frontale</text>
+</svg>`,
+
+bicycle:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes bc_kl{0%,100%{transform:rotate(0deg)}50%{transform:rotate(45deg)}}
+  @keyframes bc_kr{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-45deg)}}
+  .bc-kl{animation:bc_kl 1.2s ease-in-out infinite;transform-origin:72px 74px;}
+  .bc-kr{animation:bc_kr 1.2s ease-in-out infinite 0.6s;transform-origin:100px 74px;}
+</style></defs>
+<rect x="0" y="96" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="98" rx="60" ry="4" fill="rgba(0,0,0,0.25)"/>
+<!-- torse/épaules au sol -->
+<rect x="72" y="62" width="40" height="20" rx="7" fill="#5c3317"/>
+<rect x="72" y="72" width="30" height="14" rx="5" fill="#6b1d2e"/>
+<ellipse cx="82" cy="68" rx="7" ry="5" fill="#4a2810" opacity="0.4"/>
+<ellipse cx="102" cy="68" rx="7" ry="5" fill="#4a2810" opacity="0.4"/>
+<!-- tête levée -->
+<ellipse cx="120" cy="52" rx="12" ry="13" fill="#5c3317"/>
+<ellipse cx="120" cy="42" rx="13" ry="10" fill="#1a0a00"/>
+<ellipse cx="109" cy="45" rx="7" ry="8" fill="#1a0a00"/>
+<ellipse cx="130" cy="45" rx="7" ry="8" fill="#1a0a00"/>
+<ellipse cx="109" cy="53" rx="3" ry="4" fill="#4a2810"/>
+<ellipse cx="116" cy="52" rx="2.5" ry="2" fill="#fff"/>
+<ellipse cx="116" cy="52" rx="1.5" ry="1.5" fill="#1a0a00"/>
+<ellipse cx="120" cy="62" rx="8" ry="3.5" fill="#2a1005" opacity="0.8"/>
+<rect x="115" y="61" width="10" height="6" rx="3" fill="#5c3317"/>
+<!-- coudes levés -->
+<rect x="54" y="56" width="20" height="10" rx="5" fill="#5c3317" transform="rotate(-20,64,61)"/>
+<rect x="118" y="56" width="20" height="10" rx="5" fill="#5c3317" transform="rotate(20,128,61)"/>
+<ellipse cx="46" cy="58" rx="7" ry="5" fill="#4a2810"/>
+<ellipse cx="136" cy="58" rx="7" ry="5" fill="#4a2810"/>
+<!-- hanches -->
+<rect x="66" y="78" width="40" height="16" rx="6" fill="#6b1d2e"/>
+<!-- jambes animées bicycle -->
+<g class="bc-kl">
+  <rect x="44" y="70" width="32" height="14" rx="6" fill="#6b1d2e"/>
+  <rect x="24" y="80" width="26" height="14" rx="6" fill="#6b1d2e"/>
+  <ellipse cx="22" cy="94" rx="12" ry="5" fill="#1a0a00"/>
+</g>
+<g class="bc-kr">
+  <rect x="96" y="70" width="32" height="14" rx="6" fill="#6b1d2e"/>
+  <rect x="116" y="80" width="26" height="14" rx="6" fill="#6b1d2e"/>
+  <ellipse cx="140" cy="94" rx="12" ry="5" fill="#1a0a00"/>
+</g>
+<text x="80" y="107" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Crunch Bicycle</text>
+</svg>`,
+
+leg_raise:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes lr_l{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-62deg)}}
+  .lr-legs{animation:lr_l 2.2s ease-in-out infinite;transform-origin:40px 76px;}
+</style></defs>
+<rect x="0" y="84" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="86" rx="65" ry="4" fill="rgba(0,0,0,0.25)"/>
+<!-- tête sol -->
+<ellipse cx="140" cy="66" rx="12" ry="13" fill="#5c3317"/>
+<ellipse cx="140" cy="56" rx="13" ry="10" fill="#1a0a00"/>
+<ellipse cx="129" cy="59" rx="7" ry="8" fill="#1a0a00"/>
+<ellipse cx="150" cy="59" rx="7" ry="8" fill="#1a0a00"/>
+<ellipse cx="129" cy="67" rx="3" ry="4" fill="#4a2810"/>
+<ellipse cx="136" cy="66" rx="2.5" ry="2" fill="#fff"/>
+<ellipse cx="136" cy="66" rx="1.5" ry="1.5" fill="#1a0a00"/>
+<ellipse cx="140" cy="77" rx="8" ry="3.5" fill="#2a1005" opacity="0.8"/>
+<!-- torse sol -->
+<rect x="60" y="68" width="78" height="18" rx="7" fill="#5c3317"/>
+<rect x="60" y="72" width="50" height="14" rx="5" fill="#6b1d2e"/>
+<!-- bras le long corps -->
+<rect x="116" y="76" width="12" height="8" rx="4" fill="#5c3317"/>
+<rect x="100" y="76" width="12" height="8" rx="4" fill="#5c3317"/>
+<ellipse cx="100" cy="82" rx="8" ry="5" fill="#4a2810"/>
+<ellipse cx="130" cy="82" rx="8" ry="5" fill="#4a2810"/>
+<!-- jambes animées montée -->
+<g class="lr-legs">
+  <rect x="22" y="68" width="42" height="16" rx="7" fill="#6b1d2e"/>
+  <rect x="8" y="68" width="42" height="16" rx="7" fill="#6b1d2e" transform="translate(0,18)"/>
+  <ellipse cx="14" cy="84" rx="13" ry="6" fill="#1a0a00"/>
+  <ellipse cx="36" cy="84" rx="13" ry="6" fill="#1a0a00"/>
+</g>
+<text x="80" y="98" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Leg Raises</text>
+</svg>`,
+
+mountain_climber:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes mc_l{0%,100%{transform:translateX(0) translateY(0)}50%{transform:translateX(18px) translateY(-10px)}}
+  @keyframes mc_r{0%,100%{transform:translateX(0) translateY(0)}50%{transform:translateX(-18px) translateY(-10px)}}
+  .mc-kl{animation:mc_l 0.9s ease-in-out infinite;transform-origin:55px 70px;}
+  .mc-kr{animation:mc_r 0.9s ease-in-out infinite 0.45s;transform-origin:80px 70px;}
+</style></defs>
+<rect x="0" y="90" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="92" rx="65" ry="4" fill="rgba(0,0,0,0.25)"/>
+<!-- tête -->
+<ellipse cx="136" cy="42" rx="12" ry="13" fill="#5c3317"/>
+<ellipse cx="136" cy="32" rx="13" ry="10" fill="#1a0a00"/>
+<ellipse cx="125" cy="35" rx="7" ry="8" fill="#1a0a00"/>
+<ellipse cx="147" cy="35" rx="7" ry="8" fill="#1a0a00"/>
+<ellipse cx="125" cy="43" rx="3" ry="4" fill="#4a2810"/>
+<ellipse cx="131" cy="42" rx="2.5" ry="2" fill="#fff"/>
+<ellipse cx="131" cy="42" rx="1.5" ry="1.5" fill="#1a0a00"/>
+<ellipse cx="136" cy="52" rx="8" ry="3.5" fill="#2a1005" opacity="0.8"/>
+<rect x="131" y="51" width="10" height="7" rx="3" fill="#5c3317"/>
+<!-- torse planche -->
+<rect x="52" y="50" width="82" height="18" rx="7" fill="#5c3317"/>
+<rect x="52" y="58" width="52" height="12" rx="5" fill="#6b1d2e"/>
+<ellipse cx="72" cy="56" rx="7" ry="5" fill="#4a2810" opacity="0.4"/>
+<ellipse cx="88" cy="56" rx="7" ry="5" fill="#4a2810" opacity="0.4"/>
+<!-- bras appui -->
+<rect x="24" y="62" width="32" height="14" rx="6" fill="#5c3317"/>
+<rect x="104" y="62" width="32" height="14" rx="6" fill="#5c3317"/>
+<ellipse cx="20" cy="76" rx="10" ry="7" fill="#4a2810"/>
+<ellipse cx="136" cy="76" rx="10" ry="7" fill="#4a2810"/>
+<!-- jambes fixes -->
+<rect x="28" y="66" width="28" height="14" rx="6" fill="#6b1d2e"/>
+<rect x="54" y="66" width="28" height="14" rx="6" fill="#6b1d2e"/>
+<ellipse cx="18" cy="90" rx="12" ry="5" fill="#1a0a00"/>
+<ellipse cx="56" cy="90" rx="12" ry="5" fill="#1a0a00"/>
+<!-- genoux animés en alternance -->
+<g class="mc-kl">
+  <ellipse cx="55" cy="72" rx="12" ry="11" fill="#5a1828"/>
+  <rect x="42" y="64" width="26" height="14" rx="6" fill="#6b1d2e"/>
+</g>
+<g class="mc-kr">
+  <ellipse cx="80" cy="72" rx="12" ry="11" fill="#5a1828"/>
+  <rect x="67" y="64" width="26" height="14" rx="6" fill="#6b1d2e"/>
+</g>
+<text x="80" y="106" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Mountain Climbers</text>
+</svg>`,
+
+russian_twist:`<svg viewBox="0 0 160 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+<defs><style>
+  @keyframes rt_t{0%,100%{transform:rotate(0deg)}25%{transform:rotate(28deg)}75%{transform:rotate(-28deg)}}
+  .rt-torso{animation:rt_t 2s ease-in-out infinite;transform-origin:80px 58px;}
+</style></defs>
+<rect x="0" y="96" width="160" height="4" rx="2" fill="#1e2a38"/>
+<ellipse cx="80" cy="98" rx="40" ry="4" fill="rgba(0,0,0,0.25)"/>
+<!-- jambes fixes en V -->
+<rect x="52" y="72" width="16" height="36" rx="7" fill="#6b1d2e" transform="rotate(-20,60,90)"/>
+<rect x="92" y="72" width="16" height="36" rx="7" fill="#6b1d2e" transform="rotate(20,100,90)"/>
+<ellipse cx="36" cy="94" rx="13" ry="6" fill="#1a0a00"/>
+<ellipse cx="124" cy="94" rx="13" ry="6" fill="#1a0a00"/>
+<!-- genoux levés -->
+<ellipse cx="56" cy="74" rx="10" ry="8" fill="#5a1828"/>
+<ellipse cx="104" cy="74" rx="10" ry="8" fill="#5a1828"/>
+<!-- torse + tête animés -->
+<g class="rt-torso">
+  <!-- torse incliné à 45° -->
+  <rect x="62" y="42" width="36" height="32" rx="8" fill="#5c3317"/>
+  <rect x="62" y="58" width="36" height="18" rx="5" fill="#6b1d2e"/>
+  <ellipse cx="72" cy="50" rx="7" ry="5" fill="#4a2810" opacity="0.4"/>
+  <ellipse cx="88" cy="50" rx="7" ry="5" fill="#4a2810" opacity="0.4"/>
+  <!-- tête -->
+  <ellipse cx="80" cy="26" rx="13" ry="14" fill="#5c3317"/>
+  <ellipse cx="80" cy="16" rx="14" ry="11" fill="#1a0a00"/>
+  <ellipse cx="68" cy="19" rx="8" ry="9" fill="#1a0a00"/>
+  <ellipse cx="92" cy="19" rx="8" ry="9" fill="#1a0a00"/>
+  <ellipse cx="68" cy="27" rx="3.5" ry="4.5" fill="#4a2810"/>
+  <ellipse cx="75" cy="26" rx="2.5" ry="2" fill="#fff"/>
+  <ellipse cx="75" cy="26" rx="1.5" ry="1.5" fill="#1a0a00"/>
+  <ellipse cx="80" cy="37" rx="9" ry="4" fill="#2a1005" opacity="0.8"/>
+  <rect x="75" y="36" width="10" height="7" rx="3" fill="#5c3317"/>
+  <!-- bras en rotation -->
+  <rect x="30" y="52" width="52" height="12" rx="6" fill="#5c3317"/>
+  <ellipse cx="24" cy="58" rx="9" ry="6" fill="#4a2810"/>
+  <ellipse cx="84" cy="58" rx="9" ry="6" fill="#4a2810"/>
+</g>
+<text x="80" y="108" text-anchor="middle" fill="#4a5568" font-size="9" font-family="system-ui,sans-serif" font-weight="600">Russian Twist</text>
+</svg>`
+};
+
+const TIPS=["💧 Bois 500ml d'eau dès le réveil — métabolisme +30% pendant 1h.","😴 8h de sommeil = muscles réparés + graisses brûlées. Priorité absolue.","🌿 Remplace le Maggi par gingembre frais + ail + oignon + poivre.","⏰ Mange à heures fixes — l'insuline régulée = moins de stockage de graisse.","📱 Pas d'écrans 1h avant de dormir — la mélatonine est essentielle.","🥚 4 œufs le matin = satiété jusqu'à midi. Anti-grignotage naturel.","🫁 Entre chaque série : 3 respirations profondes. Oxygène + récupération.","📸 Photo de face + côté le jour de pesée. La photo dit ce que la balance cache.","🍚 Plantain et macabo : TOUJOURS bouillis. Frit = 2× plus de calories.","🔥 Quand tu veux arrêter : 30 secondes de plus. C'est là que ça change.","💪 Courbatures J+2 = muscles qui grandissent. Bonne douleur, continue.","🧂 Réduire le sel = -1 à 2kg d'eau en 1 semaine. Ventre qui dégonfle.","🎯 Un écart alimentaire = reprendre simplement au repas suivant.","🌡️ L'échauffement n'est pas optionnel. 80% des blessures = muscle froid.","🚫 Alcool = lipolyse stoppée 48h. Une soirée = 2 jours perdus.","💆 10 min d'étirements après séance = -40% de courbatures.","🎽 Entraîne-toi même sans envie — les meilleurs résultats sont ces jours-là.","🫀 Mois 1-2 : prendre l'habitude est la priorité, pas la performance.","🏆 Mois 5-6 : ajoute 2-3 reps par exercice. Le corps s'est adapté.","🤲 Prie, dors, mange bien, entraîne-toi. Simple. Répète 183 jours."];
+
+function buildDays(){
+  const days=[];let gi=0;
+  for(const m of MONTHS){
+    for(let d=m.startD;d<=m.endD;d++){
+      const dow=new Date(m.year,m.mNum-1,d).getDay();
+      const ds=`${m.year}-${String(m.mNum).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      days.push({d,mName:m.name,mNum:m.mNum,year:m.year,dow,ds,phase:m.phase,gi});
+      gi++;
+    }
+  }
+  return days;
+}
+const ALL=buildDays();
+function isWeighDay(ds){return ALL.filter(x=>x.dow===1).some(x=>x.ds===ds);}
+
+let curM=0;
+let weights=LS.get('weights',{});
+let doneDays=LS.get('done',{});
+
+// ── WEIGHT TRACKER ──
+function buildWeightTracker(){
+  const mondays=ALL.filter(x=>x.dow===1);
+  const g=document.getElementById('weightGrid');
+  g.innerHTML='';
+  mondays.forEach((day,i)=>{
+    const pw=i===0?90.4:parseFloat(weights[mondays[i-1].ds]||'');
+    const cw=parseFloat(weights[day.ds]||'');
+    const diff=(!isNaN(cw)&&!isNaN(pw))?(cw-pw).toFixed(1):null;
+    const el=document.createElement('div');
+    el.className='ww'+(!isNaN(cw)?' filled':'');
+    el.innerHTML=`<div class="ww-l">Sem ${i+1}</div><div class="ww-d">${day.d} ${day.mName}</div>
+      <input class="ww-i" type="number" step="0.1" placeholder="${i===0?'90.4':'-- kg'}" value="${weights[day.ds]||''}" data-date="${day.ds}"/>
+      ${diff!==null?`<div class="ww-df ${parseFloat(diff)<0?'gd':'bd'}">${parseFloat(diff)<0?'▼':'▲'} ${Math.abs(diff)}kg</div>`:''}`;
+    g.appendChild(el);
+  });
+  g.querySelectorAll('.ww-i').forEach(inp=>{
+    inp.addEventListener('change',e=>{
+      const dt=e.target.dataset.date;
+      if(e.target.value) weights[dt]=e.target.value; else delete weights[dt];
+      LS.set('weights',weights); buildWeightTracker(); buildProgress();
+    });
+  });
+}
+
+function buildProgress(){
+  const total=ALL.length;
+  const done=Object.keys(doneDays).filter(k=>doneDays[k]).length;
+  const run=ALL.filter(d=>[1,3,5].includes(d.dow));
+  const mus=ALL.filter(d=>[2,4,6].includes(d.dow));
+  const rd=run.filter(d=>doneDays[d.ds]).length;
+  const md=mus.filter(d=>doneDays[d.ds]).length;
+  // Countdown to race
+  const now=new Date();
+  const race=new Date(RACE_DATE);
+  const daysLeft=Math.max(0,Math.ceil((race-now)/(24*60*60*1000)));
+  const totalDays=Math.ceil((race-new Date("2026-04-20"))/(24*60*60*1000));
+  const raceProgress=Math.min(100,Math.round((1-daysLeft/totalDays)*100));
+  const bars=[
+    {lbl:`🏁 Semi-Marathon Marcq — J-${daysLeft}`,pct:raceProgress,color:'linear-gradient(90deg,var(--gold),var(--fire2))'},
+    {lbl:'Running (séances)',pct:Math.round(rd/run.length*100),color:'linear-gradient(90deg,var(--b),#67e8f9)'},
+    {lbl:'Musculation',pct:Math.round(md/mus.length*100),color:'linear-gradient(90deg,var(--fire),var(--fire2))'},
+    {lbl:'Jours complétés',pct:Math.round(done/total*100),color:'linear-gradient(90deg,var(--g),var(--b))'},
+  ];
+  document.getElementById('progressBars').innerHTML=bars.map(b=>`
+    <div>
+      <div class="pl"><span>${b.lbl}</span><span style="color:var(--t)">${b.pct}%</span></div>
+      <div class="pb"><div class="pf" style="width:${b.pct}%;background:${b.color}"></div></div>
+    </div>`).join('');
+}
+
+// ── CALENDAR ──
+function buildNav(){
+  const nav=document.getElementById('monthNav');
+  nav.innerHTML='';
+  MONTHS.forEach((m,i)=>{
+    const btn=document.createElement('button');
+    btn.className='mbtn'+(i===curM?' active':'');
+    btn.textContent=m.name+' '+m.year;
+    btn.onclick=()=>{curM=i;buildNav();buildCal();};
+    nav.appendChild(btn);
+  });
+}
+
+function renderMealPlan(dow,gi){
+  const idx=dow===0?6:gi%6;
+  const r=CAM[idx];
+  const meals=[BREAKFAST, r.lunch, r.snack, r.dinner];
+  return`<div class="meal-grid-small">${meals.map(m=>`
+    <div class="mcs">
+      <div class="mct">${m.time}</div><div class="mcn">${m.name}</div>
+      <ul class="mcl">${m.items.map(it=>`<li>${it}</li>`).join('')}</ul>
+      <div class="mckcal">${m.kcal}</div>
+    </div>`).join('')}</div>`;
+}
+
+function renderDayContent(day){
+  const sType=SCHED[day.dow];
+  const weigh=isWeighDay(day.ds);
+  const tip=TIPS[day.gi%TIPS.length];
+  const isRaceDay=day.ds===RACE_DATE;
+  let html='';
+
+  // ── RACE DAY SPECIAL ──
+  if(isRaceDay){
+    const rp=RUN_PLAN[21]||RUN_PLAN[RUN_PLAN.length-1];
+    const rd=rp.hiit;
+    html+=`
+      <div style="background:linear-gradient(135deg,rgba(240,165,0,0.15),rgba(232,66,15,0.1));border:2px solid rgba(240,165,0,0.5);border-radius:16px;padding:20px;text-align:center;margin-bottom:14px;">
+        <div style="font-size:48px;margin-bottom:8px;">🏁</div>
+        <div style="font-family:Bebas Neue,sans-serif;font-size:32px;letter-spacing:3px;color:var(--gold);margin-bottom:6px;">JOUR DE COURSE !</div>
+        <div style="font-size:14px;font-weight:700;color:var(--t);margin-bottom:4px;">Semi-Marathon de Marcq-en-Barœul</div>
+        <div style="font-size:12px;color:var(--m);margin-bottom:16px;">21,1 km · C'est le jour J — tu es prêt !</div>
+        <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:16px;">
+          <div style="text-align:center"><div style="font-family:Bebas Neue,sans-serif;font-size:28px;color:var(--fire2)">21,1</div><div style="font-size:9px;color:var(--m);letter-spacing:2px;text-transform:uppercase">km</div></div>
+          <div style="text-align:center"><div style="font-family:Bebas Neue,sans-serif;font-size:28px;color:var(--b)">6 mois</div><div style="font-size:9px;color:var(--m);letter-spacing:2px;text-transform:uppercase">préparation</div></div>
+          <div style="text-align:center"><div style="font-family:Bebas Neue,sans-serif;font-size:28px;color:var(--g)">🏅</div><div style="font-size:9px;color:var(--m);letter-spacing:2px;text-transform:uppercase">médaille</div></div>
+        </div>
+        <div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:14px;text-align:left;">
+          <div style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">📋 Protocole Race Day</div>
+          ${rd.steps.map(r=>`<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;font-size:12px;">
+            <span style="font-size:16px;flex-shrink:0">${r.i}</span>
+            <span style="color:var(--m);flex:1">${r.t}</span>
+            <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--gold);font-weight:700">${r.d}</span>
+          </div>`).join('')}
+        </div>
+        <div style="margin-top:14px;background:rgba(232,66,15,0.1);border:1px solid rgba(232,66,15,0.25);border-radius:10px;padding:12px;font-size:12px;color:var(--fire2);line-height:1.7;text-align:left;">
+          ⚡ <strong style="color:var(--t)">Stratégie :</strong> ${rd.conseil}
+        </div>
+      </div>`;
+    html+=doneBtn(day.ds);
+    return html;
+  }
+
+  // ── WEIGH BANNER ──
+  if(weigh) html+=`<div class="weigh-box"><div style="font-size:24px">⚖️</div>
+    <div><div style="font-weight:700;color:var(--g);font-size:12px;margin-bottom:3px">JOUR DE PESÉE — À JEUN</div>
+    <div style="font-size:11px;color:var(--m)">Après les toilettes, avant de manger. Note le résultat dans l'onglet Pesées.</div></div></div>`;
+
+  // ── REST ──
+  if(sType==='rest'){
+    html+=`<div class="rest-box"><div style="font-size:40px;margin-bottom:10px">😴</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:24px;letter-spacing:3px;color:var(--b);margin-bottom:7px">REPOS COMPLET</div>
+      <div style="font-size:12px;color:var(--m);line-height:1.7">Aujourd'hui ton corps répare et reconstruit. C'est pendant le repos que les muscles grossissent. Stretching léger optionnel 10 min.</div></div>`;
+
+  // ── RUNNING — Progressive Plan ──
+  } else if(SESSIONS[sType]?.type==='running'){
+    const s=getRunSession(sType,day.ds);
+    const wIdx=getWeekIndex(day.ds)+1;
+    const m=MONTHS.find(mo=>mo.name===day.mName)||MONTHS[0];
+    // Phase banner
+    const phaseColors={base:'rgba(56,189,248,0.1)',build:'rgba(240,165,0,0.1)',peak:'rgba(232,66,15,0.1)',taper:'rgba(168,85,247,0.1)',recovery:'rgba(34,197,94,0.1)'};
+    const phaseBorders={base:'rgba(56,189,248,0.25)',build:'rgba(240,165,0,0.25)',peak:'rgba(232,66,15,0.3)',taper:'rgba(168,85,247,0.3)',recovery:'rgba(34,197,94,0.25)'};
+    const phaseIcons={base:'🏗️',build:'📈',peak:'🔥',taper:'⚡',recovery:'🌱'};
+    const rp=m.runPhase||'base';
+    // Countdown to race
+    const raceMs=new Date(RACE_DATE)-new Date(day.ds);
+    const raceDays=Math.max(0,Math.ceil(raceMs/(24*60*60*1000)));
+    html+=`
+      <div style="background:${phaseColors[rp]};border:1px solid ${phaseBorders[rp]};border-radius:12px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:12px;">
+        <div style="font-size:24px">${phaseIcons[rp]}</div>
+        <div style="flex:1">
+          <div style="font-size:10px;color:var(--m);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Semaine ${wIdx} · ${m.phaseDesc||''}</div>
+          <div style="font-size:12px;font-weight:700;color:var(--t)">${s.title}</div>
+          ${s.runDist?`<div style="font-size:11px;color:var(--gold);margin-top:2px">📍 Distance estimée : ${s.runDist}</div>`:''}
+        </div>
+        ${raceDays>0?`<div style="text-align:center;flex-shrink:0"><div style="font-family:Bebas Neue,sans-serif;font-size:26px;color:var(--gold);line-height:1">${raceDays}</div><div style="font-size:8px;color:var(--m);letter-spacing:1px;text-transform:uppercase">j avant<br>Marcq</div></div>`:`<div style="font-size:20px">🏁</div>`}
+      </div>
+      <div class="slbl">🔥 Échauffement</div>
+      <div class="warmup"><div style="font-size:24px">🌡️</div>
+      <div><div class="wu-dur">${s.warmup.dur}</div><div class="wu-steps">${s.warmup.steps}</div></div></div>
+      <div class="slbl">🏃 Séance — ${s.runType}</div>
+      <div class="run-box">
+        ${s.runSteps.map(r=>`<div class="rs"><span style="font-size:16px">${r.i}</span><span style="color:var(--m);flex:1;font-size:12px">${r.t}</span><span class="rs-t">${r.d}</span></div>`).join('')}
+      </div>`;
+
+  // ── MUSCLE ──
+  } else {
+    const s=SESSIONS[sType];
+    html+=`<div class="slbl">🔥 Échauffement</div>
+    <div class="warmup"><div style="font-size:24px">🌡️</div>
+    <div><div class="wu-dur">${s.warmup.dur}</div><div class="wu-steps">${s.warmup.steps}</div></div></div>
+    <div class="rest-info"><div style="font-size:18px">⏱️</div>
+    <div style="font-size:11px;color:var(--m)"><strong style="color:var(--b)">Temps de repos :</strong> ${s.restInfo}</div></div>
+    <div class="slbl">💪 Exercices</div>
+    <div class="exgrid">${s.exercises.map(ex=>`
+      <div class="exc">
+        <div class="exvis" style="height:150px;background:linear-gradient(135deg,#0a0c14,#0e1520);display:flex;align-items:center;justify-content:center;padding:8px;">
+          ${SVG_ANIM[ex.svg]||`<span style="font-size:50px">💪</span>`}
+        </div>
+        <div class="exi"><div class="exn">${ex.n}</div><div class="exs">${ex.s}</div><div class="exr">${ex.r}</div><div class="extip">${ex.tip}</div></div>
+      </div>`).join('')}</div>`;
+  }
+
+  // ── TIP + CONSEIL RUNNING ──
+  const s=SESSIONS[sType];
+  html+=`<div class="slbl">🍽️ Repas du Jour</div>${renderMealPlan(day.dow,day.gi)}`;
+  html+=`<div class="slbl">💡 Conseil</div><div class="tipbox"><div style="font-size:20px">🧠</div><div style="font-size:12px;color:var(--m);line-height:1.65">${tip}</div></div>`;
+  if(s&&s.tip&&s.type!=='running'){
+    html+=`<div class="tipbox fire" style="margin-top:8px"><div style="font-size:20px">⚡</div><div style="font-size:12px;color:var(--m);line-height:1.65">${s.tip}</div></div>`;
+  }
+  if(s?.type==='running'){
+    const rs=getRunSession(sType,day.ds);
+    if(rs.tip) html+=`<div class="tipbox fire" style="margin-top:8px"><div style="font-size:20px">🏃</div><div style="font-size:12px;color:var(--m);line-height:1.65">${rs.tip}</div></div>`;
+  }
+
+  html+=doneBtn(day.ds);
+  return html;
+}
+
+function doneBtn(ds){
+  const isDone=doneDays[ds];
+  return`<div class="done-btn-wrap">
+    <button class="done-btn" onclick="toggleDone('${ds}',this)"
+      style="background:${isDone?'rgba(34,197,94,0.1)':'rgba(232,66,15,0.1)'};border-color:${isDone?'rgba(34,197,94,0.3)':'rgba(232,66,15,0.25)'};color:${isDone?'var(--g)':'var(--fire2)'}">
+      ${isDone?'✅ SÉANCE COMPLÉTÉE':'☐ MARQUER COMME FAIT'}
+    </button></div>`;
+}
+
+function toggleDone(ds,btn){
+  doneDays[ds]=!doneDays[ds];
+  LS.set('done',doneDays);
+  btn.textContent=doneDays[ds]?'✅ SÉANCE COMPLÉTÉE':'☐ MARQUER COMME FAIT';
+  btn.style.background=doneDays[ds]?'rgba(34,197,94,0.1)':'rgba(232,66,15,0.1)';
+  btn.style.borderColor=doneDays[ds]?'rgba(34,197,94,0.3)':'rgba(232,66,15,0.25)';
+  btn.style.color=doneDays[ds]?'var(--g)':'var(--fire2)';
+  btn.closest('.dc').classList.toggle('rdone',doneDays[ds]);
+}
+
+function buildCal(){
+  const sec=document.getElementById('calSection');
+  const m=MONTHS[curM];
+  const mDays=ALL.filter(d=>d.mName===m.name);
+  const sLabel={
+    rest:"Repos Complet 😴",
+    run_hiit:"Running — HIIT / Fractionné",
+    run_endurance:"Running — Sortie Longue",
+    run_pyramid:"Running — Tempo / Seuil",
+    chest:"Poitrine · Triceps · Épaules",
+    back:"Dos · Biceps · Chaîne Post.",
+    legs_core:"Jambes · Fessiers · CORE"
+  };
+  // Phase color map
+  const phaseCol={base:'var(--b)',build:'var(--gold)',peak:'var(--fire2)',taper:'var(--p)',recovery:'var(--g)'};
+  const rp=m.runPhase||'base';
+  let html=`
+    <div style="margin-bottom:18px;">
+      <div style="font-family:Bebas Neue,sans-serif;font-size:40px;letter-spacing:4px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px;">
+        <span style="color:var(--fire)">${m.name}</span> <span>${m.year}</span>
+        <span style="font-size:12px;color:var(--m);background:var(--s2);border:1px solid var(--bd);padding:4px 10px;border-radius:100px;letter-spacing:2px">Phase ${m.phase}</span>
+      </div>
+      <div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--m);display:flex;align-items:center;gap:10px;">
+        <span style="color:${phaseCol[rp]};font-weight:700">🏃 Semi-Marathon :</span>
+        <span>${m.phaseDesc||''}</span>
+      </div>
+    </div>`;
+
+  for(const day of mDays){
+    const sType=SCHED[day.dow];
+    const s=SESSIONS[sType];
+    const weigh=isWeighDay(day.ds);
+    const isDone=doneDays[day.ds];
+    const isRace=day.ds===RACE_DATE;
+    let cc='dc';
+    if(isRace) cc+=' running'; // gold highlight
+    else if(s.type==='running') cc+=' running';
+    else if(s.type==='rest') cc+=' rest-day';
+    if(isDone) cc+=' rdone';
+
+    // Dynamic label for running days
+    let dayTitle=sLabel[sType]||s.title;
+    if(s.type==='running' && !isRace){
+      const wIdx=getWeekIndex(day.ds);
+      const plan=RUN_PLAN[wIdx];
+      if(sType==='run_hiit'&&plan?.hiit) dayTitle=`🏃 ${plan.hiit.label}`;
+      else if(sType==='run_endurance'&&plan?.endurance) dayTitle=`🏃 ${plan.endurance.label}`;
+      else if(sType==='run_pyramid'&&plan?.tempo) dayTitle=`🏃 ${plan.tempo.label}`;
+    }
+
+    const badges=[];
+    if(isRace) badges.push(`<span class="badge" style="background:rgba(240,165,0,0.15);color:var(--gold);border:1px solid rgba(240,165,0,0.4)">🏁 COURSE</span>`);
+    else if(s.type==='running') badges.push(`<span class="badge br">🏃 Running</span>`);
+    else if(s.type==='muscle') badges.push(`<span class="badge bm">💪 Muscu</span>`);
+    else if(s.type==='rest') badges.push(`<span class="badge brest">😴 Repos</span>`);
+    if(weigh) badges.push(`<span class="badge bw">⚖️ Pesée</span>`);
+    if(isDone) badges.push(`<span class="badge bdone">✅ Fait</span>`);
+
+    // Countdown for running days
+    const raceMs=new Date(RACE_DATE)-new Date(day.ds);
+    const raceDays=Math.ceil(raceMs/(24*60*60*1000));
+    const cdTag=raceDays>0&&raceDays<=60&&s.type==='running'
+      ?`<span class="badge" style="background:rgba(168,85,247,0.1);color:var(--p);border:1px solid rgba(168,85,247,0.25)">J-${raceDays}</span>`:'';
+
+    html+=`<div class="${cc}" id="dc-${day.ds}" ${isRace?'style="border-color:rgba(240,165,0,0.45)!important"':''}>
+      <div class="dh" onclick="togDay('dc-${day.ds}')">
+        <div class="dn" ${isRace?'style="color:var(--gold)"':''}>${String(day.d).padStart(2,'0')}</div>
+        <div class="di">
+          <div class="dname">${DNAMES[day.dow]}</div>
+          <div class="dtitle" ${isRace?'style="color:var(--gold)"':''}>${isRace?'🏁 SEMI-MARATHON — Marcq-en-Barœul':dayTitle}</div>
+          <div class="dbadges">${badges.join('')}${cdTag}</div>
+        </div>
+        <div class="chev">▾</div>
+      </div>
+      <div class="dcont">${renderDayContent(day)}</div>
+    </div>`;
+  }
+  sec.innerHTML=html;
+}
+
+function togDay(id){document.getElementById(id).classList.toggle('exp');}
+
+// ══════════════════════════════════════════════════════════
+// STRAVA INTEGRATION
+// ══════════════════════════════════════════════════════════
+const STRAVA_CLIENT_ID     = "235720";
+const STRAVA_CLIENT_SECRET = "35559339270ec8e5bb740476729c6444a5d690d2";
+const STRAVA_REDIRECT      = window.location.href.split('?')[0].split('#')[0];
+const STRAVA_SCOPE         = "read,activity:read_all";
+
+let stravaTokens = LS.get('stravaTokens', null);
+
+function stravaAuth() {
+  const url = `https://www.strava.com/oauth/authorize`
+    + `?client_id=${STRAVA_CLIENT_ID}`
+    + `&redirect_uri=${encodeURIComponent(STRAVA_REDIRECT)}`
+    + `&response_type=code`
+    + `&approval_prompt=auto`
+    + `&scope=${STRAVA_SCOPE}`;
+  window.location.href = url;
+}
+
+async function stravaExchangeCode(code) {
+  const r = await fetch('https://www.strava.com/oauth/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      client_id: STRAVA_CLIENT_ID,
+      client_secret: STRAVA_CLIENT_SECRET,
+      code,
+      grant_type: 'authorization_code'
+    })
+  });
+  if (!r.ok) throw new Error('Échange de token échoué');
+  return r.json();
+}
+
+async function stravaRefreshToken() {
+  if (!stravaTokens) return false;
+  if (stravaTokens.expires_at > Date.now() / 1000 + 60) return true;
+  try {
+    const r = await fetch('https://www.strava.com/oauth/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        client_id: STRAVA_CLIENT_ID,
+        client_secret: STRAVA_CLIENT_SECRET,
+        refresh_token: stravaTokens.refresh_token,
+        grant_type: 'refresh_token'
+      })
+    });
+    if (!r.ok) return false;
+    const data = await r.json();
+    stravaTokens = { ...stravaTokens, ...data };
+    LS.set('stravaTokens', stravaTokens);
+    return true;
+  } catch { return false; }
+}
+
+async function stravaFetch(endpoint) {
+  const ok = await stravaRefreshToken();
+  if (!ok) throw new Error('Token expiré — reconnecte-toi');
+  const r = await fetch(`https://www.strava.com/api/v3${endpoint}`, {
+    headers: { 'Authorization': `Bearer ${stravaTokens.access_token}` }
+  });
+  if (!r.ok) throw new Error(`Erreur API Strava (${r.status})`);
+  return r.json();
+}
+
+function secToPace(metersPerSec) {
+  if (!metersPerSec || metersPerSec === 0) return '--';
+  const secPerKm = 1000 / metersPerSec;
+  const m = Math.floor(secPerKm / 60);
+  const s = Math.round(secPerKm % 60);
+  return `${m}'${String(s).padStart(2,'0')}"`;
+}
+
+function mToKm(m) { return (m / 1000).toFixed(1); }
+
+function paceToSec(paceStr) {
+  // e.g. "5'10\"" -> seconds per km
+  const parts = paceStr.replace('"','').split("'");
+  return parseInt(parts[0]) * 60 + parseInt(parts[1] || 0);
+}
+
+function paceColor(actualPace, targetPaceFast, targetPaceSlow) {
+  // actualPace in sec/km, targets in sec/km
+  if (actualPace <= targetPaceSlow && actualPace >= targetPaceFast) return '#22c55e'; // in zone
+  if (actualPace < targetPaceFast) return '#38bdf8'; // faster than target
+  return '#e8420f'; // slower than target
+}
+
+async function stravaLoad() {
+  stravaShow('loading');
+  try {
+    // Parallel fetch: athlete + activities
+    const [athlete, activities] = await Promise.all([
+      stravaFetch('/athlete'),
+      stravaFetch('/athlete/activities?per_page=20&page=1')
+    ]);
+
+    // Filter only runs
+    const runs = activities.filter(a => a.type === 'Run' || a.sport_type === 'Run');
+
+    // Fill profile
+    document.getElementById('stravaAvatar').src = athlete.profile_medium || athlete.profile || '';
+    document.getElementById('stravaName').textContent = `${athlete.firstname} ${athlete.lastname}`;
+    document.getElementById('stravaCity').textContent = [athlete.city, athlete.country].filter(Boolean).join(', ') || 'Athlète Strava';
+
+    const totalM = (athlete.stats?.all_run_totals?.distance || 0)
+                 + (athlete.stats?.ytd_run_totals?.distance || 0);
+    // fallback: sum from recent runs
+    const recentKm = runs.reduce((s,r) => s + r.distance, 0);
+    document.getElementById('stravaTotalKm').textContent = `🏃 ${mToKm(recentKm)} km récents`;
+    document.getElementById('stravaRuns').textContent = `${runs.length} activités affichées`;
+
+    // ── Semaine courante ──
+    const now = new Date();
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - now.getDay() + 1); // lundi
+    weekStart.setHours(0,0,0,0);
+    const weekRuns = runs.filter(r => new Date(r.start_date) >= weekStart);
+    const weekKm   = weekRuns.reduce((s,r) => s + r.distance/1000, 0).toFixed(1);
+    const weekCount = weekRuns.length;
+    // Target this week from RUN_PLAN
+    const wIdx = getWeekIndex(now.toISOString().split('T')[0]);
+    const plan  = RUN_PLAN[Math.min(wIdx, RUN_PLAN.length-1)];
+    const targetSessions = 3;
+    const pctSessions = Math.min(100, Math.round(weekCount/targetSessions*100));
+    const sessColor = weekCount >= targetSessions ? '#22c55e' : weekCount >= 2 ? '#f0a500' : '#e8420f';
+
+    document.getElementById('stravaWeekCard').innerHTML = `
+      <div class="card-ttl" style="color:#fc4c02;">📅 Cette Semaine — Semaine ${wIdx+1}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:${sessColor};line-height:1;">${weekCount}<span style="font-size:16px;color:var(--m);">/${targetSessions}</span></div>
+          <div style="font-size:11px;color:var(--m);">séances running</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#fc4c02;line-height:1;">${weekKm}</div>
+          <div style="font-size:11px;color:var(--m);">km cette semaine</div>
+        </div>
+      </div>
+      <div style="height:6px;background:var(--s3);border-radius:100px;overflow:hidden;margin-bottom:10px;">
+        <div style="height:100%;width:${pctSessions}%;background:linear-gradient(90deg,${sessColor},#fc4c02);border-radius:100px;transition:width 0.8s;"></div>
+      </div>
+      <div style="font-size:12px;color:var(--m);">
+        ${weekCount >= 3 ? '✅ Objectif semaine atteint !' : `⚡ ${targetSessions - weekCount} séance(s) restante(s) pour atteindre l'objectif`}
+      </div>`;
+
+    // ── Analyse allure ──
+    const lastRun = runs[0];
+    const targetFastSec = paceToSec("5'00\"");
+    const targetSlowSec = paceToSec("6'20\"");
+    let paceHtml = '<div style="font-size:12px;color:var(--m);">Aucun run récent trouvé</div>';
+    if (lastRun) {
+      const lastPaceSec = 1000 / lastRun.average_speed;
+      const lastPaceStr = secToPace(lastRun.average_speed);
+      const col = paceColor(lastPaceSec, targetFastSec, targetSlowSec);
+      const lastDist = mToKm(lastRun.distance);
+      const lastDate = new Date(lastRun.start_date_local).toLocaleDateString('fr-FR', {day:'2-digit',month:'short'});
+      let paceMsg = '';
+      if (lastPaceSec < targetFastSec) paceMsg = `✅ Plus rapide que la cible — attention aux sorties longues, bride-toi à 6'00"/km !`;
+      else if (lastPaceSec <= targetSlowSec) paceMsg = `✅ Dans la zone cible du programme. Parfait !`;
+      else paceMsg = `⚠️ Allure inférieure à la cible. Vérifie l'intensité de la séance.`;
+
+      paceHtml = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-size:10px;color:var(--m);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px;">Dernier run · ${lastDate} · ${lastDist} km</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:${col};line-height:1;">${lastPaceStr}<span style="font-size:14px;color:var(--m);">/km</span></div>
+          </div>
+          <div style="text-align:right;font-size:12px;color:var(--m);">
+            <div>Cible sorties longues</div>
+            <div style="color:var(--g);font-weight:700;">6'00"-6'20"/km</div>
+            <div style="margin-top:4px;">Cible tempo/seuil</div>
+            <div style="color:var(--b);font-weight:700;">5'05"-5'20"/km</div>
+          </div>
+        </div>
+        <div style="background:var(--s3);border-radius:10px;padding:10px;font-size:12px;color:${col};line-height:1.6;">${paceMsg}</div>`;
+    }
+    document.getElementById('stravaPaceCard').innerHTML = `
+      <div class="card-ttl" style="color:var(--b);">⚡ Analyse d'Allure</div>${paceHtml}`;
+
+    // ── Activités récentes ──
+    const actHtml = runs.slice(0,8).map(r => {
+      const pace = secToPace(r.average_speed);
+      const dist = mToKm(r.distance);
+      const dur  = new Date(r.elapsed_time * 1000).toISOString().substr(11,5);
+      const date = new Date(r.start_date_local).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});
+      const paceSec = 1000 / r.average_speed;
+      const col = paceColor(paceSec, targetFastSec, targetSlowSec);
+      const hr   = r.average_heartrate ? `❤️ ${Math.round(r.average_heartrate)} bpm` : '';
+      return `
+        <div style="border-bottom:1px solid var(--bd);padding:12px 0;display:flex;align-items:center;gap:12px;">
+          <div style="font-size:22px;">🏃</div>
+          <div style="flex:1;">
+            <div style="font-weight:700;font-size:13px;margin-bottom:2px;">${r.name}</div>
+            <div style="font-size:10px;color:var(--m);">${date} · ${dur} min ${hr}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fc4c02;line-height:1;">${dist} km</div>
+            <div style="font-size:11px;color:${col};font-weight:700;">${pace}/km</div>
+          </div>
+        </div>`;
+    }).join('');
+    document.getElementById('stravaActivities').innerHTML = actHtml || '<div style="color:var(--m);font-size:13px;text-align:center;padding:12px;">Aucune activité récente</div>';
+
+    // ── Progression vers le semi ──
+    const raceDate = new Date(RACE_DATE);
+    const daysLeft = Math.max(0, Math.ceil((raceDate - now) / (24*60*60*1000)));
+    const totalProgramDays = Math.ceil((raceDate - new Date("2026-04-20")) / (24*60*60*1000));
+    const progPct = Math.min(100, Math.round((1 - daysLeft/totalProgramDays)*100));
+    const totalRunKm = runs.reduce((s,r) => s + r.distance/1000, 0).toFixed(0);
+    document.getElementById('stravaRaceCard').innerHTML = `
+      <div class="card-ttl" style="color:var(--gold);">🏁 Progression vers Marcq-en-Barœul</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
+        <div style="background:var(--s3);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);line-height:1;">${daysLeft}</div>
+          <div style="font-size:9px;color:var(--m);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;">Jours restants</div>
+        </div>
+        <div style="background:var(--s3);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#fc4c02;line-height:1;">${totalRunKm}</div>
+          <div style="font-size:9px;color:var(--m);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;">km récents</div>
+        </div>
+        <div style="background:var(--s3);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--g);line-height:1;">${progPct}%</div>
+          <div style="font-size:9px;color:var(--m);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;">Programme</div>
+        </div>
+      </div>
+      <div style="height:6px;background:var(--s3);border-radius:100px;overflow:hidden;">
+        <div style="height:100%;width:${progPct}%;background:linear-gradient(90deg,var(--gold),#fc4c02);border-radius:100px;transition:width 0.8s;"></div>
+      </div>
+      <div style="font-size:12px;color:var(--m);margin-top:10px;text-align:center;">
+        Objectif : <strong style="color:var(--t)">1h45 - 1h52</strong> · Allure cible : <strong style="color:#fc4c02;">5'00"-5'10"/km</strong>
+      </div>`;
+
+    stravaShow('profile');
+  } catch(e) {
+    document.getElementById('stravaErrorMsg').textContent = e.message;
+    stravaShow('error');
+  }
+}
+
+function stravaShow(state) {
+  document.getElementById('stravaAuthCard').style.display   = state === 'auth'    ? 'block' : 'none';
+  document.getElementById('stravaLoading').style.display    = state === 'loading' ? 'block' : 'none';
+  document.getElementById('stravaProfile').style.display    = state === 'profile' ? 'block' : 'none';
+  document.getElementById('stravaError').style.display      = state === 'error'   ? 'block' : 'none';
+}
+
+function stravaDisconnect() {
+  stravaTokens = null;
+  LS.set('stravaTokens', null);
+  stravaShow('auth');
+}
+
+function stravaRetry() { stravaLoad(); }
+
+async function stravaInit() {
+  // Check for OAuth callback code in URL
+  const params = new URLSearchParams(window.location.search);
+  const code   = params.get('code');
+  const error  = params.get('error');
+
+  if (error) {
+    // User denied access
+    window.history.replaceState({}, '', window.location.pathname);
+    stravaShow('auth');
+    return;
+  }
+
+  if (code) {
+    // Exchange code for tokens
+    window.history.replaceState({}, '', window.location.pathname);
+    stravaShow('loading');
+    try {
+      const data = await stravaExchangeCode(code);
+      stravaTokens = {
+        access_token:  data.access_token,
+        refresh_token: data.refresh_token,
+        expires_at:    data.expires_at,
+        athlete:       data.athlete
+      };
+      LS.set('stravaTokens', stravaTokens);
+      await stravaLoad();
+    } catch(e) {
+      document.getElementById('stravaErrorMsg').textContent = 'Connexion échouée : ' + e.message;
+      stravaShow('error');
+    }
+    return;
+  }
+
+  if (stravaTokens) {
+    await stravaLoad();
+  } else {
+    stravaShow('auth');
+  }
+}
+
+setupReminderChecks();
+renderWater();
+
+// ── Handle Strava OAuth callback ──
+(function() {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get('code') || p.get('error')) {
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.getElementById('view-strava').classList.add('active');
+    const btn = document.querySelector("[onclick=\"showTab('strava',this)\"]");
+    if (btn) btn.classList.add('active');
+    stravaInit();
+  }
+})();
+setTimeout(()=>{
+  const t=new Date();
+  const ds=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+  // Find month index
+  MONTHS.forEach((m,i)=>{
+    const s=new Date(m.year,m.mNum-1,m.startD);
+    const e=new Date(m.year,m.mNum-1,m.endD);
+    if(t>=s&&t<=e) curM=i;
+  });
+},100);
+</script>
+</body>
+</html>
