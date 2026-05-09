@@ -2032,6 +2032,47 @@ function renderDayContent(day){
     if(rs.tip) html+=`<div class="tipbox fire" style="margin-top:8px"><div style="font-size:20px">🏃</div><div style="font-size:12px;color:var(--m);line-height:1.65">${rs.tip}</div></div>`;
   }
 
+  // ── MEAL ANALYZER ──
+  html+=`
+  <div class="slbl">📸 Analyser mon Repas</div>
+  <div style="background:var(--s2);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:16px;margin-bottom:8px;" id="maz-${day.ds}">
+
+    <!-- Résumé calorique du jour -->
+    <div id="maz-summary-${day.ds}" style="margin-bottom:14px;"></div>
+
+    <!-- Boutons upload -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+      <button onclick="document.getElementById('maz-cam-${day.ds}').click()"
+        style="background:rgba(232,66,15,0.1);border:1px solid rgba(232,66,15,0.35);border-radius:12px;padding:16px 10px;text-align:center;cursor:pointer;width:100%;">
+        <div style="font-size:32px;margin-bottom:6px;">📷</div>
+        <div style="font-weight:700;font-size:12px;color:var(--fire2);">Photo</div>
+        <div style="font-size:10px;color:var(--m);margin-top:2px;">Appareil photo</div>
+      </button>
+      <button onclick="document.getElementById('maz-gal-${day.ds}').click()"
+        style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.3);border-radius:12px;padding:16px 10px;text-align:center;cursor:pointer;width:100%;">
+        <div style="font-size:32px;margin-bottom:6px;">🖼️</div>
+        <div style="font-weight:700;font-size:12px;color:var(--b);">Galerie</div>
+        <div style="font-size:10px;color:var(--m);margin-top:2px;">Choisir image</div>
+      </button>
+    </div>
+    <input type="file" id="maz-cam-${day.ds}" accept="image/*" capture="environment"
+      onchange="mazHandleFile(event,'${day.ds}')" style="display:none;">
+    <input type="file" id="maz-gal-${day.ds}" accept="image/*"
+      onchange="mazHandleFile(event,'${day.ds}')" style="display:none;">
+
+    <!-- Preview + analyse -->
+    <img id="maz-preview-${day.ds}" style="display:none;width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-bottom:10px;border:1px solid rgba(255,255,255,0.08);">
+    <button id="maz-btn-${day.ds}" onclick="mazAnalyze('${day.ds}')" style="display:none;width:100%;padding:12px;background:linear-gradient(135deg,var(--fire),var(--fire2));border:none;border-radius:10px;color:#fff;font-family:inherit;font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:10px;">
+      🔍 Analyser ce repas
+    </button>
+    <div id="maz-loading-${day.ds}" style="display:none;text-align:center;padding:16px;color:var(--m);font-size:12px;">
+      <div style="width:28px;height:28px;border:2px solid rgba(255,255,255,0.06);border-top-color:var(--fire2);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 8px;"></div>
+      Analyse IA en cours...
+    </div>
+    <div id="maz-result-${day.ds}" style="display:none;"></div>
+    <div id="maz-entries-${day.ds}"></div>
+  </div>`;
+
   html+=doneBtn(day.ds);
   return html;
 }
@@ -2135,10 +2176,228 @@ function buildCal(){
   sec.innerHTML=html;
 }
 
-function togDay(id){document.getElementById(id).classList.toggle('exp');}
+function togDay(id){
+  const card = document.getElementById(id);
+  card.classList.toggle('exp');
+  // Init meal analyzer for this day when opened
+  if (card.classList.contains('exp')) {
+    const ds = id.replace('dc-','');
+    setTimeout(() => mazInitDay(ds), 50);
+  }
+}
 
 // ══════════════════════════════════════════════════════════
-// STRAVA INTEGRATION
+// MEAL ANALYZER — Intégré par jour, persistant
+// ══════════════════════════════════════════════════════════
+let mazLog = LS.get('mazlog', {}); // { "2026-04-20": [{id,time,name,calories,proteines,glucides,lipides,score,score_label,score_color,thumb}] }
+
+function mazSave() { LS.set('mazlog', mazLog); }
+
+function mazGetDay(ds) { return mazLog[ds] || []; }
+
+function mazRenderSummary(ds) {
+  const el = document.getElementById('maz-summary-' + ds);
+  if (!el) return;
+  const entries = mazGetDay(ds);
+  if (!entries.length) { el.innerHTML = ''; return; }
+  const totK = entries.reduce((s,e)=>s+(e.calories||0),0);
+  const totP = entries.reduce((s,e)=>s+(e.proteines||0),0);
+  const totG = entries.reduce((s,e)=>s+(e.glucides||0),0);
+  const totL = entries.reduce((s,e)=>s+(e.lipides||0),0);
+  const TARGET = 2250;
+  const pct = Math.min(100, Math.round(totK/TARGET*100));
+  const col = pct>110?'var(--fire)':pct>80?'var(--g)':'var(--b)';
+  el.innerHTML = `
+    <div style="background:var(--s3);border-radius:10px;padding:12px;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div>
+          <div style="font-family:Bebas Neue,sans-serif;font-size:28px;color:${col};line-height:1;">${totK} <span style="font-size:13px;color:var(--m);">kcal</span></div>
+          <div style="font-size:10px;color:var(--m);">Objectif ${TARGET} kcal · ${pct}% atteint</div>
+        </div>
+        <svg width="44" height="44" viewBox="0 0 36 36" style="transform:rotate(-90deg)">
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--s1)" stroke-width="3"/>
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="${col}" stroke-width="3"
+            stroke-dasharray="${pct} 100" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--m);">
+        <span>Prot <strong style="color:var(--b)">${totP}g</strong></span>
+        <span>Gluc <strong style="color:var(--gold)">${totG}g</strong></span>
+        <span>Lip <strong style="color:var(--p)">${totL}g</strong></span>
+        <span>Repas <strong style="color:var(--g)">${entries.length}</strong></span>
+      </div>
+      <div style="margin-top:8px;height:4px;background:var(--s1);border-radius:100px;overflow:hidden;">
+        <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,${col},var(--b));border-radius:100px;"></div>
+      </div>
+    </div>`;
+  mazRenderEntries(ds);
+}
+
+function mazRenderEntries(ds) {
+  const el = document.getElementById('maz-entries-' + ds);
+  if (!el) return;
+  const entries = mazGetDay(ds);
+  if (!entries.length) { el.innerHTML = ''; return; }
+  el.innerHTML = entries.map((e,i) => `
+    <div style="background:var(--s3);border-radius:10px;padding:11px;margin-bottom:7px;display:flex;gap:10px;align-items:flex-start;">
+      ${e.thumb ? `<img src="${e.thumb}" style="width:46px;height:46px;border-radius:7px;object-fit:cover;flex-shrink:0;border:1px solid rgba(255,255,255,0.06);" onerror="this.style.display='none'">` : ''}
+      <div style="flex:1;">
+        <div style="font-weight:700;font-size:12px;margin-bottom:2px;">${e.name}</div>
+        <div style="font-size:10px;color:var(--fire2);font-family:monospace;margin-bottom:4px;">${e.time}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <span style="font-size:15px;font-weight:800;color:var(--g);">${e.calories} kcal</span>
+          <span style="font-size:10px;color:var(--m);">P:${e.proteines}g G:${e.glucides}g L:${e.lipides}g</span>
+        </div>
+        <div style="margin-top:4px;display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;
+          background:${e.score>=7?'rgba(34,197,94,0.1)':e.score>=5?'rgba(240,165,0,0.1)':'rgba(232,66,15,0.1)'};
+          color:${e.score>=7?'var(--g)':e.score>=5?'var(--gold)':'var(--fire)'};
+          border:1px solid ${e.score>=7?'rgba(34,197,94,0.25)':e.score>=5?'rgba(240,165,0,0.25)':'rgba(232,66,15,0.25)'};">
+          ★ ${e.score}/10 · ${e.score_label}
+        </div>
+      </div>
+      <button onclick="mazDelete('${ds}',${i})" style="background:none;border:none;color:#374151;font-size:14px;cursor:pointer;padding:0 0 0 4px;flex-shrink:0;">✕</button>
+    </div>`).join('');
+}
+
+function mazDelete(ds, idx) {
+  if (!mazLog[ds]) return;
+  mazLog[ds].splice(idx, 1);
+  if (!mazLog[ds].length) delete mazLog[ds];
+  mazSave();
+  mazRenderSummary(ds);
+}
+
+function mazHandleFile(e, ds) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  e.target.value = '';
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const preview = document.getElementById('maz-preview-' + ds);
+    const btn     = document.getElementById('maz-btn-' + ds);
+    if (preview) { preview.src = ev.target.result; preview.style.display = 'block'; preview.dataset.b64 = ev.target.result.split(',')[1]; }
+    if (btn) btn.style.display = 'block';
+    document.getElementById('maz-result-' + ds).style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function mazAnalyze(ds) {
+  const preview = document.getElementById('maz-preview-' + ds);
+  const btn     = document.getElementById('maz-btn-' + ds);
+  const loading = document.getElementById('maz-loading-' + ds);
+  const result  = document.getElementById('maz-result-' + ds);
+  if (!preview?.dataset?.b64) return;
+
+  btn.style.display    = 'none';
+  loading.style.display = 'block';
+  result.style.display  = 'none';
+
+  // Detect mime type from src
+  const src  = preview.src || '';
+  const mime = src.startsWith('data:image/png') ? 'image/png'
+             : src.startsWith('data:image/webp') ? 'image/webp'
+             : src.startsWith('data:image/gif') ? 'image/gif'
+             : 'image/jpeg';
+
+  try {
+    const res  = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: mime, data: preview.dataset.b64 } },
+            { type: 'text', text: `Tu es nutritionniste expert perte de graisse et prise de muscle. Analyse ce repas. Reponds UNIQUEMENT en JSON valide sans texte avant/apres ni backticks:
+{"nom":"nom du plat","calories":nombre,"proteines":nombre,"glucides":nombre,"lipides":nombre,"score":nombre1-10,"score_label":"Excellent|Bon|Correct|Passable|Mauvais","score_color":"#22c55e|#f0a500|#38bdf8|#e8420f","aliments":["item1","item2"],"feedback":"2-3 phrases points positifs et axes amelioration pour perdre du gras et gagner du muscle","conseil":"1 conseil pratique court et actionnable"}` }
+          ]
+        }]
+      })
+    });
+    const data = await res.json();
+    const txt  = data.content?.[0]?.text || '';
+    const meal = JSON.parse(txt.replace(/```json|```/g,'').trim());
+
+    // Show result
+    result.style.display = 'block';
+    result.innerHTML = `
+      <div style="background:var(--s3);border-radius:12px;padding:14px;margin-bottom:10px;">
+        <div style="font-weight:800;font-size:16px;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:10px;">${meal.nom}</div>
+        <div style="background:var(--s2);border-radius:9px;padding:10px;display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <div style="font-size:36px;font-weight:800;color:${meal.score_color};line-height:1;">${meal.score}<span style="font-size:13px;color:var(--m);">/10</span></div>
+          <div><div style="font-weight:700;color:${meal.score_color};font-size:13px;">${meal.score_label}</div><div style="font-size:10px;color:var(--m);margin-top:2px;">Score nutritionnel</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px;">
+          ${[
+            [meal.calories,'kcal','var(--g)'],
+            [meal.proteines+'g','Prot.','var(--b)'],
+            [meal.glucides+'g','Gluc.','var(--gold)'],
+            [meal.lipides+'g','Lip.','var(--p)']
+          ].map(([v,l,c])=>`
+            <div style="background:var(--s2);border-radius:8px;padding:8px 4px;text-align:center;">
+              <div style="font-size:13px;font-weight:800;color:${c};line-height:1;">${v}</div>
+              <div style="font-size:9px;color:var(--m);letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${l}</div>
+            </div>`).join('')}
+        </div>
+        ${meal.aliments?.length?`<div style="font-size:10px;color:var(--m);margin-bottom:8px;">Detecte : ${meal.aliments.join(', ')}</div>`:''}
+        <div style="background:var(--s2);border-radius:9px;padding:11px;font-size:12px;color:#94a3b8;line-height:1.7;margin-bottom:8px;">${meal.feedback}</div>
+        ${meal.conseil?`<div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:9px;padding:10px;font-size:11px;color:#c084fc;line-height:1.6;">💡 ${meal.conseil}</div>`:''}
+        <button onclick="mazSaveMeal('${ds}',this)" data-meal='${JSON.stringify(meal).replace(/'/g,"&#39;")}' data-thumb="${preview.src.substring(0,200)}"
+          style="width:100%;margin-top:10px;padding:10px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:9px;color:var(--g);font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;letter-spacing:1px;">
+          💾 Sauvegarder dans le journal
+        </button>
+      </div>`;
+  } catch(err) {
+    result.style.display = 'block';
+    result.innerHTML = `<div style="color:var(--fire);font-size:12px;padding:10px;background:rgba(232,66,15,0.08);border-radius:9px;">❌ Erreur : ${err.message}<br><small>Vérifie ta connexion et réessaie.</small></div>`;
+    btn.style.display = 'block';
+  }
+  loading.style.display = 'none';
+}
+
+function mazSaveMeal(ds, btn) {
+  const meal  = JSON.parse(btn.dataset.meal.replace(/&#39;/g,"'"));
+  const thumb = btn.dataset.thumb;
+  const now   = new Date();
+  const entry = {
+    id:   Date.now(),
+    time: `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`,
+    name: meal.nom,
+    calories:  meal.calories,
+    proteines: meal.proteines,
+    glucides:  meal.glucides,
+    lipides:   meal.lipides,
+    score:       meal.score,
+    score_label: meal.score_label,
+    score_color: meal.score_color,
+    thumb
+  };
+  if (!mazLog[ds]) mazLog[ds] = [];
+  mazLog[ds].push(entry);
+  mazSave();
+  btn.textContent = '✅ Sauvegardé !';
+  btn.disabled = true;
+  // Refresh summary
+  mazRenderSummary(ds);
+  // Reset preview for next meal
+  setTimeout(() => {
+    const preview = document.getElementById('maz-preview-' + ds);
+    const btnA    = document.getElementById('maz-btn-' + ds);
+    const result  = document.getElementById('maz-result-' + ds);
+    if (preview) { preview.style.display = 'none'; delete preview.dataset.b64; }
+    if (btnA)    btnA.style.display = 'none';
+    if (result)  result.style.display = 'none';
+  }, 1500);
+}
+
+// Init meal summaries when a day card is expanded
+function mazInitDay(ds) {
+  mazRenderSummary(ds);
+}
+
 // ══════════════════════════════════════════════════════════
 const STRAVA_CLIENT_ID     = "235720";
 const STRAVA_CLIENT_SECRET = "35559339270ec8e5bb740476729c6444a5d690d2";
@@ -2432,6 +2691,169 @@ async function stravaInit() {
     await stravaLoad();
   } else {
     stravaShow('auth');
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// MEAL ANALYZER — Intégré dans chaque jour
+// ══════════════════════════════════════════════════════════
+let mazCurrentB64 = {};
+let mazCurrentImg = {};
+
+function mazHandleFile(e, ds) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  e.target.value = '';
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const dataUrl = ev.target.result;
+    mazCurrentB64[ds] = dataUrl.split(',')[1];
+    mazCurrentImg[ds] = dataUrl;
+    const prev = document.getElementById('maz-preview-'+ds);
+    const btn  = document.getElementById('maz-btn-'+ds);
+    const res  = document.getElementById('maz-result-'+ds);
+    if(prev){ prev.src = dataUrl; prev.style.display = 'block'; }
+    if(btn)  btn.style.display = 'block';
+    if(res)  res.style.display = 'none';
+    const ld = document.getElementById('maz-loading-'+ds);
+    if(ld) ld.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function mazAnalyze(ds) {
+  const b64 = mazCurrentB64[ds];
+  if (!b64) return;
+  const btn     = document.getElementById('maz-btn-'+ds);
+  const loading = document.getElementById('maz-loading-'+ds);
+  const result  = document.getElementById('maz-result-'+ds);
+  if(btn)     btn.style.display     = 'none';
+  if(loading) loading.style.display = 'block';
+  if(result)  result.style.display  = 'none';
+  const img  = mazCurrentImg[ds] || '';
+  const mime = img.startsWith('data:image/png')  ? 'image/png'
+             : img.startsWith('data:image/webp') ? 'image/webp'
+             : 'image/jpeg';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: mime, data: b64 } },
+            { type: 'text', text: `Tu es nutritionniste expert perte de graisse + prise de muscle. Analyse ce repas. Reponds UNIQUEMENT en JSON valide sans texte avant/apres ni backticks:
+{"nom":"nom du plat","calories":nombre,"proteines":nombre,"glucides":nombre,"lipides":nombre,"score":nombre1-10,"score_label":"Excellent|Bon|Correct|Passable|Mauvais","score_color":"#22c55e|#f0a500|#38bdf8|#e8420f","aliments":["item1","item2"],"feedback":"2-3 phrases points positifs et axes amelioration pour perdre du gras et gagner du muscle","conseil":"1 conseil pratique court et actionnable"}` }
+          ]
+        }]
+      })
+    });
+    const data = await res.json();
+    const txt  = data.content?.[0]?.text || '';
+    const meal = JSON.parse(txt.replace(/```json|```/g,'').trim());
+    const log  = LS.get('meallog', {});
+    if (!log[ds]) log[ds] = [];
+    const now  = new Date();
+    const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    log[ds].push({ id: Date.now(), time, thumb: mazCurrentImg[ds], ...meal });
+    LS.set('meallog', log);
+    if(loading) loading.style.display = 'none';
+    if(result) {
+      result.style.display = 'block';
+      result.innerHTML = `
+        <div style="background:var(--s3);border-radius:10px;padding:14px;margin-bottom:10px;">
+          <div style="font-weight:800;font-size:15px;margin-bottom:10px;">${meal.nom}</div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+            <div style="font-family:Bebas Neue,sans-serif;font-size:36px;color:${meal.score_color};line-height:1;">${meal.score}<span style="font-size:13px;color:var(--m);">/10</span></div>
+            <div style="font-size:12px;color:${meal.score_color};font-weight:700;">${meal.score_label}<br><span style="color:var(--m);font-weight:400;">Score nutritionnel</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;">
+            ${[['Kcal',meal.calories,'#22c55e'],['Prot.',meal.proteines+'g','#38bdf8'],['Gluc.',meal.glucides+'g','#f0a500'],['Lip.',meal.lipides+'g','#a855f7']].map(([l,v,c])=>
+              `<div style="background:var(--s2);border-radius:8px;padding:8px 4px;text-align:center;"><div style="font-size:14px;font-weight:800;color:${c};line-height:1;">${v}</div><div style="font-size:9px;color:var(--m);letter-spacing:1px;text-transform:uppercase;margin-top:2px;">${l}</div></div>`
+            ).join('')}
+          </div>
+          ${meal.aliments?.length ? `<div style="font-size:10px;color:var(--m);margin-bottom:8px;">Detecte : ${meal.aliments.join(', ')}</div>` : ''}
+          <div style="font-size:12px;color:#94a3b8;line-height:1.7;background:var(--s2);border-radius:8px;padding:10px;margin-bottom:8px;">${meal.feedback}</div>
+          ${meal.conseil ? `<div style="font-size:12px;color:#c084fc;line-height:1.6;background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:8px;padding:10px;">💡 ${meal.conseil}</div>` : ''}
+        </div>`;
+    }
+    mazCurrentB64[ds] = null;
+    mazCurrentImg[ds] = null;
+    if(btn) btn.style.display = 'none';
+    mazRefreshSummary(ds);
+    mazRefreshEntries(ds);
+  } catch(err) {
+    if(loading) loading.style.display = 'none';
+    if(btn)     btn.style.display     = 'block';
+    if(result) {
+      result.style.display = 'block';
+      result.innerHTML = `<div style="color:var(--fire2);font-size:12px;padding:10px;background:rgba(232,66,15,0.08);border-radius:8px;">❌ Erreur : ${err.message}. Verifie ta connexion.</div>`;
+    }
+  }
+}
+
+function mazRefreshSummary(ds) {
+  const el = document.getElementById('maz-summary-'+ds);
+  if (!el) return;
+  const log     = LS.get('meallog', {});
+  const entries = log[ds] || [];
+  if (!entries.length) { el.innerHTML = ''; return; }
+  const totK = entries.reduce((s,e)=>s+(e.calories||0),0);
+  const totP = entries.reduce((s,e)=>s+(e.proteines||0),0);
+  const TARGET = 2250;
+  const pct    = Math.min(100, Math.round(totK/TARGET*100));
+  const col    = pct>110?'#e8420f':pct>75?'#22c55e':'#38bdf8';
+  el.innerHTML = `
+    <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.18);border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div>
+        <div style="font-family:Bebas Neue,sans-serif;font-size:26px;color:${col};line-height:1;">${totK} <span style="font-size:12px;">kcal</span></div>
+        <div style="font-size:10px;color:var(--m);">Objectif ${TARGET} kcal · ${pct}%</div>
+      </div>
+      <div style="font-size:11px;color:var(--m);">
+        Prot. <strong style="color:#38bdf8">${totP}g</strong> &nbsp;
+        Repas <strong style="color:#22c55e">${entries.length}</strong>
+      </div>
+    </div>
+    <div style="height:4px;background:var(--s3);border-radius:100px;overflow:hidden;margin-top:5px;">
+      <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,${col},#38bdf8);border-radius:100px;"></div>
+    </div>`;
+}
+
+function mazRefreshEntries(ds) {
+  const el = document.getElementById('maz-entries-'+ds);
+  if (!el) return;
+  const log     = LS.get('meallog', {});
+  const entries = (log[ds] || []).slice().reverse();
+  if (!entries.length) { el.innerHTML = ''; return; }
+  el.innerHTML = `
+    <div style="margin-top:10px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:var(--m);text-transform:uppercase;margin-bottom:8px;">Repas enregistres ce jour</div>
+      ${entries.map((e, i) => `
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--bd);">
+          ${e.thumb ? `<img src="${e.thumb}" style="width:44px;height:44px;border-radius:7px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">` : ''}
+          <div style="flex:1;">
+            <div style="font-weight:700;font-size:12px;">${e.nom}</div>
+            <div style="font-size:10px;color:var(--fire2);font-family:monospace;">${e.time}</div>
+            <div style="font-size:11px;color:var(--m);">P:${e.proteines}g · G:${e.glucides}g · L:${e.lipides}g</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:16px;font-weight:800;color:#22c55e;">${e.calories} kcal</div>
+            <button onclick="mazDelete('${ds}',${entries.length-1-i})" style="background:none;border:none;color:var(--m);font-size:13px;cursor:pointer;padding:2px;">✕</button>
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function mazDelete(ds, idx) {
+  const log = LS.get('meallog', {});
+  if (log[ds]) {
+    log[ds].splice(idx, 1);
+    LS.set('meallog', log);
+    mazRefreshSummary(ds);
+    mazRefreshEntries(ds);
   }
 }
 
